@@ -1,0 +1,16 @@
+node_modules/
+
+Smart_Attendance_Project/backend/.env
+Smart_Attendance_Project/frontend/.env
+Smart_Attendance_Project/frontend/.env.local
+Smart_Attendance_Project/frontend/.env.development.local
+Smart_Attendance_Project/frontend/.env.test.local
+Smart_Attendance_Project/frontend/.env.production.local
+
+dist/
+build/
+.vite/
+
+*.log
+Thumbs.db
+.DS_Store
