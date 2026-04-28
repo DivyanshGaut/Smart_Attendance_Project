@@ -34,8 +34,9 @@ services:
       - key: ALLOW_INSECURE_DEV_ATTENDANCE
         value: "false"
 
-  - type: static
+  - type: web
     name: smart-attendance-frontend
+    runtime: static
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist
