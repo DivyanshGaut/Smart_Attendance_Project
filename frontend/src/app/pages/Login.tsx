@@ -121,7 +121,7 @@ export default function Login() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#EAE0CF] via-[#f5f0e8] to-[#94B4C1]/30 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-gradient-to-br from-[#EAE0CF] via-[#f5f0e8] to-[#94B4C1]/30 flex items-center justify-center px-4 py-6 sm:p-6">
       {/* Animated background effects */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#547792]/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-pulse"></div>
@@ -130,11 +130,11 @@ export default function Login() {
 
       <div className="relative z-10 w-full max-w-6xl">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-6xl font-extrabold mb-4 bg-gradient-to-r from-[#213448] via-[#547792] to-[#213448] bg-clip-text text-transparent">
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="mx-auto max-w-4xl text-4xl font-extrabold leading-tight bg-gradient-to-r from-[#213448] via-[#547792] to-[#213448] bg-clip-text text-transparent sm:text-5xl lg:text-6xl">
             Smart Attendance System
           </h1>
-          <p className="text-xl text-[#547792]">Advanced Proxy Detection & Real-time Monitoring</p>
+          <p className="mt-3 text-base text-[#547792] sm:text-xl">Advanced Proxy Detection & Real-time Monitoring</p>
         </div>
 
         {/* User Type Selection */}
@@ -146,7 +146,7 @@ export default function Login() {
               <button
                 key={item.type}
                 onClick={() => setUserType(item.type)}
-                className={`p-6 rounded-2xl border-3 transition-all duration-300 transform hover:scale-105 ${
+                className={`p-4 sm:p-6 rounded-2xl border-3 transition-all duration-300 transform hover:scale-[1.02] sm:hover:scale-105 ${
                   isSelected
                     ? `${item.border} bg-gradient-to-br ${item.gradient} shadow-2xl border-4`
                     : `border-2 border-[#94B4C1] bg-white/80 ${item.hover}`
@@ -167,7 +167,7 @@ export default function Login() {
         {/* Login Form */}
         <Card className="bg-white/95 border-3 border-[#94B4C1] backdrop-blur-lg shadow-2xl">
           <CardHeader className="text-center">
-            <CardTitle className="text-3xl text-[#213448]">
+            <CardTitle className="text-2xl text-[#213448] sm:text-3xl">
               {userTypes.find((u) => u.type === userType)?.title}
             </CardTitle>
             <CardDescription className="text-[#547792]">

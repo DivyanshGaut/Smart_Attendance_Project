@@ -253,9 +253,9 @@ useEffect(() => {
     <div className="min-h-screen bg-gradient-to-br from-[#EAE0CF] via-[#f5f0e8] to-[#EAE0CF]">
       {/* Header */}
       <div className="bg-white/80 border-b-2 border-[#94B4C1] backdrop-blur-lg sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-[#213448] to-[#547792] bg-clip-text text-transparent">
+        <div className="container mx-auto flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <div className="min-w-0">
+            <h1 className="text-2xl font-bold leading-tight bg-gradient-to-r from-[#213448] to-[#547792] bg-clip-text text-transparent sm:text-3xl">
               Teacher Dashboard
             </h1>
             <p className="text-[#547792] text-sm">Welcome, {user.name || "Teacher"}</p>
@@ -271,7 +271,7 @@ useEffect(() => {
         </div>
       </div>
 
-      <div className="container mx-auto px-6 py-8">
+      <div className="container mx-auto px-4 py-6 sm:px-6 sm:py-8">
         {/* Section and Subject Selection */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <Card className="bg-gradient-to-br from-white to-[#94B4C1]/20 border-2 border-[#94B4C1] shadow-lg">
@@ -343,7 +343,7 @@ useEffect(() => {
                 ) : (
                   <div className="space-y-4">
                     <div className="bg-white rounded-lg p-4 flex justify-center border-2 border-[#94B4C1]">
-                      <img src={qrCode} alt="Attendance QR Code" className="w-64 h-64" />
+                      <img src={qrCode} alt="Attendance QR Code" className="aspect-square w-full max-w-64" />
                     </div>
                     <div className="space-y-2">
                       <div className="flex justify-between items-center text-sm">
@@ -460,7 +460,7 @@ useEffect(() => {
                         key={material._id}
                         className="p-3 bg-[#EAE0CF]/50 border border-[#94B4C1] rounded-lg hover:bg-[#94B4C1]/20 transition-colors"
                       >
-                        <div className="flex justify-between items-start">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                           <div className="flex-1">
                             <div className="text-[#213448] font-medium text-sm">{material.title}</div>
                             <div className="text-[#547792] text-xs mt-1">{material.subject}</div>
@@ -516,7 +516,8 @@ useEffect(() => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-3">
+                    <div className="overflow-x-auto">
+                    <div className="min-w-[620px] space-y-3">
                       <div className="grid grid-cols-5 gap-4 p-3 bg-[#94B4C1]/20 rounded-lg font-semibold text-[#213448] text-sm">
                         <div>Roll No</div>
                         <div className="col-span-2">Student Name</div>
@@ -544,6 +545,7 @@ useEffect(() => {
                           </div>
                         </div>
                       ))}
+                    </div>
                     </div>
                     <div className="mt-4 flex justify-end">
                       <Button
@@ -584,12 +586,12 @@ useEffect(() => {
                               key={student.rollNo}
                               className="p-4 bg-red-50 border-2 border-red-300 rounded-lg"
                             >
-                              <div className="flex justify-between items-center">
+                              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                                 <div>
                                   <div className="text-red-800 font-semibold">{student.name} ({student.rollNo})</div>
                                   <div className="text-red-600 text-sm">Present: {student.present || 0}/{student.total || 0} classes</div>
                                 </div>
-                                <div className="text-right">
+                                <div className="sm:text-right">
                                   <Badge variant="destructive" className="text-lg px-3 py-1">
                                     {student.attendance}%
                                   </Badge>
@@ -604,7 +606,7 @@ useEffect(() => {
                         <div className="mt-6 flex justify-end">
                           <Button
                             onClick={downloadDebarredList}
-                            className="bg-gradient-to-r from-[#547792] to-[#94B4C1] hover:from-[#213448] hover:to-[#547792] text-white"
+                            className="w-full bg-gradient-to-r from-[#547792] to-[#94B4C1] hover:from-[#213448] hover:to-[#547792] text-white sm:w-auto"
                           >
                             <Download className="w-4 h-4 mr-2" />
                             Download Debarred List
@@ -646,7 +648,7 @@ useEffect(() => {
                                     key={idx}
                                     className="p-4 bg-[#94B4C1]/20 border border-[#94B4C1] rounded-lg hover:bg-[#94B4C1]/30 transition-colors"
                                   >
-                                    <div className="flex justify-between items-start">
+                                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                                       <div className="space-y-1">
                                         <div className="text-[#213448] font-semibold">{cls.subject}</div>
                                         <div className="flex items-center gap-2 text-[#547792] text-sm">
@@ -654,7 +656,7 @@ useEffect(() => {
                                           <span>{cls.time}</span>
                                         </div>
                                       </div>
-                                      <div className="text-right">
+                                      <div className="sm:text-right">
                                         <Badge className="bg-[#547792] text-white">{cls.section}</Badge>
                                         <div className="text-[#547792] text-sm mt-1">{cls.room}</div>
                                       </div>

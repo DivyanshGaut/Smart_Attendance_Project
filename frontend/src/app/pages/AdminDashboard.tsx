@@ -209,9 +209,9 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#EAE0CF] via-[#f5f0e8] to-[#EAE0CF]">
       <div className="bg-white/80 border-b-2 border-[#94B4C1] backdrop-blur-lg sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-[#213448] to-[#547792] bg-clip-text text-transparent">
+        <div className="container mx-auto flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <div className="min-w-0">
+            <h1 className="text-2xl font-bold leading-tight bg-gradient-to-r from-[#213448] to-[#547792] bg-clip-text text-transparent sm:text-3xl">
               Admin Dashboard
             </h1>
             <p className="text-[#547792] text-sm">Welcome, {user.name || "Administrator"}</p>
@@ -227,8 +227,8 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      <div className="container mx-auto px-6 py-8">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+      <div className="container mx-auto px-4 py-6 sm:px-6 sm:py-8">
+        <div className="grid grid-cols-1 gap-4 mb-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
           <StatCard icon={<Users className="w-8 h-8 text-[#547792]" />} label="Total Students" value={summary?.totalStudents ?? 0} />
           <StatCard icon={<CheckCircle2 className="w-8 h-8 text-green-600" />} label="Active Today" value={summary?.activeToday ?? 0} accent />
           <StatCard icon={<Calendar className="w-8 h-8 text-[#547792]" />} label="Sections" value={summary?.totalSections ?? 0} />
@@ -378,7 +378,8 @@ export default function AdminDashboard() {
                 {report.length === 0 ? (
                   <div className="text-[#547792] text-sm">No attendance report found for the selected filters.</div>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="overflow-x-auto">
+                  <div className="min-w-[620px] space-y-3">
                     <div className="grid grid-cols-5 gap-4 p-3 bg-[#94B4C1]/20 rounded-lg font-semibold text-[#213448] text-sm">
                       <div>Roll No</div>
                       <div className="col-span-2">Student Name</div>
@@ -404,6 +405,7 @@ export default function AdminDashboard() {
                       </div>
                     ))}
                   </div>
+                  </div>
                 )}
               </CardContent>
             </Card>
@@ -424,7 +426,8 @@ export default function AdminDashboard() {
                 {qrValidations.length === 0 ? (
                   <div className="text-[#547792] text-sm">No QR validation records available yet.</div>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="overflow-x-auto">
+                  <div className="min-w-[880px] space-y-3">
                     <div className="grid grid-cols-7 gap-4 p-3 bg-[#94B4C1]/20 rounded-lg font-semibold text-[#213448] text-sm">
                       <div>Timestamp</div>
                       <div>Teacher</div>
@@ -455,6 +458,7 @@ export default function AdminDashboard() {
                       </div>
                     ))}
                   </div>
+                  </div>
                 )}
               </CardContent>
             </Card>
@@ -473,7 +477,8 @@ export default function AdminDashboard() {
                   <div className="text-[#547792] text-sm">No weekly attendance data available yet.</div>
                 ) : (
                   <>
-                    <ResponsiveContainer width="100%" height={400}>
+                    <div className="h-[320px] sm:h-[400px]">
+                    <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={weeklyOverview}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#94B4C1" />
                         <XAxis dataKey="day" stroke="#547792" />
@@ -491,6 +496,7 @@ export default function AdminDashboard() {
                         <Bar dataKey="absent" fill="#94B4C1" radius={[8, 8, 0, 0]} name="Absent" />
                       </BarChart>
                     </ResponsiveContainer>
+                    </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
                       {weeklyOverview.map((day) => {
@@ -542,7 +548,7 @@ function StatCard({
       <CardContent className="p-4">
         <div className="flex items-center gap-3">
           {icon}
-          <div>
+          <div className="min-w-0">
             <div className="text-2xl font-bold text-[#213448]">{value}</div>
             <div className="text-xs text-[#547792]">{label}</div>
           </div>

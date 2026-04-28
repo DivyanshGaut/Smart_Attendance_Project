@@ -354,9 +354,9 @@ const handleScan = async (data: any) => {
     <div className="min-h-screen bg-gradient-to-br from-[#EAE0CF] via-[#f5f0e8] to-[#EAE0CF]">
       {/* Header */}
       <div className="bg-white/80 border-b-2 border-[#94B4C1] backdrop-blur-lg sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-[#213448] to-[#547792] bg-clip-text text-transparent">
+        <div className="container mx-auto flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <div className="min-w-0">
+            <h1 className="text-2xl font-bold leading-tight bg-gradient-to-r from-[#213448] to-[#547792] bg-clip-text text-transparent sm:text-3xl">
               Student Dashboard
             </h1>
             <p className="text-[#547792] text-sm">
@@ -374,10 +374,10 @@ const handleScan = async (data: any) => {
         </div>
       </div>
 
-      <div className="container mx-auto px-6 py-8">
+      <div className="container mx-auto px-4 py-6 sm:px-6 sm:py-8">
         {/* Low Attendance Alert */}
         {overallAttendance < 75 && (
-          <div className="mb-6 bg-red-50 border-2 border-red-400 rounded-xl p-4 flex items-center gap-3 shadow-md">
+          <div className="mb-6 bg-red-50 border-2 border-red-400 rounded-xl p-4 flex items-start gap-3 shadow-md">
             <AlertCircle className="w-6 h-6 text-red-600" />
             <div>
               <h3 className="text-red-800 font-bold">Low Attendance Warning!</h3>
@@ -401,7 +401,7 @@ const handleScan = async (data: any) => {
               </CardHeader>
               <CardContent>
                 <div className="text-center">
-                  <div className="text-6xl font-bold mb-2 bg-gradient-to-r from-[#213448] to-[#547792] bg-clip-text text-transparent">
+                  <div className="text-5xl font-bold mb-2 bg-gradient-to-r from-[#213448] to-[#547792] bg-clip-text text-transparent sm:text-6xl">
                     {overallAttendance}%
                   </div>
                   <Progress value={overallAttendance} className="h-3 mb-2 bg-[#EAE0CF]" />
@@ -690,7 +690,7 @@ const handleScan = async (data: any) => {
                       </div>
                     )}
 
-                    <div className="flex gap-4 mt-4 justify-center text-sm">
+                    <div className="flex flex-wrap gap-4 mt-4 justify-center text-sm">
                       <div className="flex items-center gap-2">
                         <div className="w-4 h-4 bg-green-100 border-2 border-green-400 rounded"></div>
                         <span className="text-[#547792]">All Present</span>
@@ -785,13 +785,13 @@ const handleScan = async (data: any) => {
                           {day.classes.map((cls, idx) => (
                             <div
                               key={idx}
-                              className="flex items-center justify-between p-3 bg-[#94B4C1]/20 border border-[#94B4C1] rounded-lg hover:bg-[#94B4C1]/30 transition-colors"
+                            className="flex flex-col gap-3 p-3 bg-[#94B4C1]/20 border border-[#94B4C1] rounded-lg hover:bg-[#94B4C1]/30 transition-colors sm:flex-row sm:items-center sm:justify-between"
                             >
                               <div className="flex items-center gap-3">
                                 <Clock className="w-4 h-4 text-[#547792]" />
                                 <span className="text-[#213448] font-medium">{cls.time}</span>
                               </div>
-                              <div className="text-right">
+                              <div className="sm:text-right">
                                 <div className="text-[#213448]">{cls.subject}</div>
                                 <div className="text-[#547792] text-sm">{cls.room}</div>
                                 {"teacher" in cls && <div className="text-[#547792] text-xs">Teacher: {cls.teacher}</div>}
@@ -833,7 +833,7 @@ const handleScan = async (data: any) => {
                         key={idx}
                         className="p-4 bg-[#EAE0CF]/50 border border-[#94B4C1] rounded-lg hover:bg-[#94B4C1]/20 transition-colors cursor-pointer"
                       >
-                        <div className="flex justify-between items-start">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                           <div className="flex gap-3">
                             <FileText className="w-5 h-5 text-[#547792] mt-1" />
                             <div>
@@ -852,7 +852,7 @@ const handleScan = async (data: any) => {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="border-[#547792] text-[#547792] hover:bg-[#547792]/10"
+                            className="w-full border-[#547792] text-[#547792] hover:bg-[#547792]/10 sm:w-auto"
                             onClick={() => material.fileUrl && window.open(material.fileUrl, "_blank")}
                           >
                             Download
