@@ -18,9 +18,15 @@ const generateQrSchema = Joi.object({
 
 // Student QR scan validation
 const scanQrSchema = Joi.object({
-  qrToken: Joi.string().required(),
-  latitude: Joi.number().optional(),
-  longitude: Joi.number().optional(),
+  sessionId: Joi.string().hex().length(24).required(),
+  qrToken: Joi.string().hex().min(64).max(64).required(),
+  signature: Joi.string().hex().length(64).required(),
+  issuedAt: Joi.date().iso().required(),
+  expiresAt: Joi.date().iso().required(),
+  latitude: Joi.number().required(),
+  longitude: Joi.number().required(),
+  accuracy: Joi.number().min(0).optional(),
+  clientScanId: Joi.string().min(16).max(128).required(),
 });
 
 // Generic query params for reports

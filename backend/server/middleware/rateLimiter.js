@@ -17,8 +17,17 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
 });
 
+const qrScanLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 12,
+  message: { message: 'Too many QR scan attempts, please wait and try again.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 module.exports = {
   apiLimiter,
   authLimiter,
+  qrScanLimiter,
 };
 

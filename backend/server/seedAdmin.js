@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
 const Admin = require("./models/Admin"); // adjust path if needed
 
-mongoose.connect("mongodb://127.0.0.1:27017/attendance_system");
+const mongoUri =
+  process.env.MONGODB_URI ||
+  process.env.MONGO_URI ||
+  "mongodb://127.0.0.1:27017/attendance_system";
+
+mongoose.connect(mongoUri);
 
 async function seedAdmin() {
 

@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
 const Teacher = require("./models/Teacher");
 
-mongoose.connect("mongodb://127.0.0.1:27017/attendance_system");
+const mongoUri =
+  process.env.MONGODB_URI ||
+  process.env.MONGO_URI ||
+  "mongodb://127.0.0.1:27017/attendance_system";
+
+mongoose.connect(mongoUri);
 
 async function seedTeachers() {
   try {

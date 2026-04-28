@@ -85,10 +85,13 @@ const generateQr = async (req, res, next) => {
     });
 
     const qrCodeDataUrl = await generateQrCodeDataUrl({
+      sessionId: session._id.toString(),
       teacherId: req.user.id,
       subject,
+      section,
       qrToken,
-      timestamp: now.toISOString()
+      issuedAt: now.toISOString(),
+      expiresAt: expiryTime.toISOString()
     });
 
     res.status(201).json({
@@ -96,7 +99,6 @@ const generateQr = async (req, res, next) => {
       qrCodeDataUrl,
       session: {
         id: session._id,
-        qrToken: session.qrToken,
         subject: session.subject,
         section: session.section,
         expiryTime: session.expiryTime

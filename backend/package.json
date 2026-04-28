@@ -5,7 +5,11 @@
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
-    "dev": "nodemon server/server.js"
+    "dev": "nodemon server/server.js",
+    "seed:admin": "node server/seedAdmin.js",
+    "seed:students": "node server/seedStudent.js",
+    "seed:teachers": "node server/seedTeacher.js",
+    "migrate:sections": "node server/migrateStudentSections.js"
   },
   "keywords": [
     "attendance",

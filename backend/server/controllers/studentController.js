@@ -4,6 +4,7 @@ const Student = require('../models/Student');
 const { scanQrSchema } = require('../utils/validators');
 const { isWithinRadius } = require('../utils/geo');
 const { sendWarningEmail } = require('../utils/mailer');
+const { verifyQrSignature } = require('../utils/qr');
 
 // Helper: compute percentage and trigger warnings if < 50%.
 const maybeTriggerLowAttendanceWarning = async (studentId) => {
@@ -26,7 +27,7 @@ const maybeTriggerLowAttendanceWarning = async (studentId) => {
 };
 
 // POST /student/scan-qr
-// Body: { qrToken, latitude, longitude }
+// Body: { sessionId, qrToken, signature, issuedAt, expiresAt, latitude, longitude, clientScanId }
 // Uses JWT student identity from req.user.
 const scanQr = async (req, res, next) => {
   try {
@@ -35,10 +36,9 @@ const scanQr = async (req, res, next) => {
       return res.status(400).json({ message: error.details[0].message });
     }
 
-    const { qrToken, latitude, longitude } = value;
-    const allowInsecureDevAttendance = process.env.ALLOW_INSECURE_DEV_ATTENDANCE === 'true';
+    const { sessionId, qrToken, signature, issuedAt, expiresAt, latitude, longitude, accuracy, clientScanId } = value;
 
-    const session = await QrSession.findOne({ qrToken });
+    const session = await QrSession.findOne({ _id: sessionId, qrToken });
     if (!session || !session.isActive) {
       return res.status(400).json({ message: 'Invalid or inactive QR session' });
     }
@@ -46,6 +46,25 @@ const scanQr = async (req, res, next) => {
     const now = new Date();
     if (now > session.expiryTime) {
       return res.status(400).json({ message: 'QR code has expired' });
+    }
+
+    if (Math.abs(new Date(expiresAt).getTime() - session.expiryTime.getTime()) > 1000) {
+      return res.status(400).json({ message: 'QR payload does not match this session' });
+    }
+
+    const signedPayload = {
+      sessionId: session._id.toString(),
+      teacherId: session.teacherId.toString(),
+      subject: session.subject,
+      section: session.section,
+      qrToken: session.qrToken,
+      issuedAt: new Date(issuedAt).toISOString(),
+      expiresAt: new Date(expiresAt).toISOString(),
+      signature,
+    };
+
+    if (!verifyQrSignature(signedPayload)) {
+      return res.status(400).json({ message: 'QR signature verification failed' });
     }
 
     const student = await Student.findById(req.user.id);
@@ -58,40 +77,61 @@ const scanQr = async (req, res, next) => {
       return res.status(400).json({ message: 'QR code is for a different section' });
     }
 
-    const hasCoordinates = Number.isFinite(latitude) && Number.isFinite(longitude);
-
-    if (hasCoordinates) {
-      const withinRadius = isWithinRadius(
-        session.latitude,
-        session.longitude,
-        latitude,
-        longitude,
-        Number(process.env.ATTENDANCE_RADIUS_METERS) || 100
-      );
-
-      if (!withinRadius) {
-        return res.status(400).json({ message: 'Location outside allowed range' });
-      }
-    } else if (!allowInsecureDevAttendance) {
-      return res.status(400).json({ message: 'Location is required to mark attendance' });
+    const maxAccuracyMeters = Number(process.env.ATTENDANCE_MAX_ACCURACY_METERS) || 150;
+    if (Number.isFinite(accuracy) && accuracy > maxAccuracyMeters) {
+      return res.status(400).json({ message: 'Location accuracy is too low. Please move outside or enable high accuracy GPS.' });
     }
 
-    // Prevent duplicate attendance (same date+subject)
+    const withinRadius = isWithinRadius(
+      session.latitude,
+      session.longitude,
+      latitude,
+      longitude,
+      Number(process.env.ATTENDANCE_RADIUS_METERS) || 100
+    );
+
+    if (!withinRadius) {
+      return res.status(400).json({ message: 'Location outside allowed range' });
+    }
+
+    const sameDeviceUsedByAnotherStudent = await Attendance.findOne({
+      qrSessionId: session._id,
+      studentId: { $ne: req.user.id },
+      'scanMetadata.clientScanId': clientScanId,
+    });
+
+    if (sameDeviceUsedByAnotherStudent) {
+      return res.status(409).json({
+        message: 'This device has already been used for another student in this QR session',
+      });
+    }
+
+    // Prevent duplicate attendance.
     const dateOnly = new Date(now.toDateString());
-    const existing = await Attendance.findOne({
+    const existingForSession = await Attendance.findOne({
+      studentId: req.user.id,
+      qrSessionId: session._id,
+    });
+
+    if (existingForSession) {
+      return res.status(400).json({ message: 'Attendance already marked for this session' });
+    }
+
+    const existingForClassToday = await Attendance.findOne({
       studentId: req.user.id,
       subject: session.subject,
       date: dateOnly,
     });
 
-    if (existing) {
-      return res.status(400).json({ message: 'Attendance already marked for this session' });
+    if (existingForClassToday) {
+      return res.status(400).json({ message: 'Attendance already marked for this subject today' });
     }
 
-    const ipAddress = req.ip;
+    const ipAddress = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.ip;
 
     const attendance = await Attendance.create({
       studentId: req.user.id,
+      qrSessionId: session._id,
       section: student.section,
       subject: session.subject,
       date: dateOnly,
@@ -100,6 +140,11 @@ const scanQr = async (req, res, next) => {
         latitude,
         longitude,
         ipAddress,
+      },
+      scanMetadata: {
+        clientScanId,
+        userAgent: req.get('user-agent'),
+        accuracy,
       },
       status: 'present',
     });
@@ -110,9 +155,7 @@ const scanQr = async (req, res, next) => {
     );
 
     return res.status(201).json({
-      message: hasCoordinates
-        ? 'Attendance marked successfully'
-        : 'Attendance marked successfully (development fallback without location)',
+      message: 'Attendance marked successfully',
       attendanceId: attendance._id,
     });
   } catch (err) {
