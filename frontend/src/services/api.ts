@@ -148,6 +148,20 @@ export const login = async (
   return response.data;
 };
 
+export const resetPassword = async (
+  role: UserRole,
+  identifier: string,
+  newPassword: string
+) => {
+  const response = await api.post<{ message: string }>("/auth/reset-password", {
+    role,
+    identifier,
+    newPassword,
+  });
+
+  return response.data;
+};
+
 export const scanQr = async (data: {
   sessionId: string;
   qrToken: string;

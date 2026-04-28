@@ -7,6 +7,12 @@ const loginSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+const resetPasswordSchema = Joi.object({
+  role: Joi.string().valid('student', 'teacher', 'admin').required(),
+  identifier: Joi.string().required(),
+  newPassword: Joi.string().min(6).required(),
+});
+
 // Teacher QR generation validation
 const generateQrSchema = Joi.object({
   subject: Joi.string().min(2).max(100).required(),
@@ -37,6 +43,7 @@ const monthYearSchema = Joi.object({
 
 module.exports = {
   loginSchema,
+  resetPasswordSchema,
   generateQrSchema,
   scanQrSchema,
   monthYearSchema,

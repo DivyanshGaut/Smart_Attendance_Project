@@ -1,12 +1,19 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { GraduationCap, UserCircle, ShieldCheck, Eye, EyeOff } from "lucide-react";
-import { loginStudent } from "../../services/authService";
+import { loginStudent, resetUserPassword } from "../../services/authService";
 import type { UserRole } from "../../services/api";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Button } from "../components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "../components/ui/dialog";
 
 type UserType = UserRole;
 
@@ -15,9 +22,16 @@ export default function Login() {
   const [userType, setUserType] = useState<UserType>("student");
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResetOpen, setIsResetOpen] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
+  });
+  const [resetForm, setResetForm] = useState({
+    identifier: "",
+    newPassword: "",
+    confirmPassword: "",
   });
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -42,6 +56,37 @@ export default function Login() {
       alert("Invalid username or password");
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (resetForm.newPassword !== resetForm.confirmPassword) {
+      alert("New passwords do not match");
+      return;
+    }
+
+    setIsResetting(true);
+
+    try {
+      await resetUserPassword(userType, resetForm.identifier.trim(), resetForm.newPassword);
+      alert("Password reset successfully. You can sign in with the new password.");
+      setCredentials({
+        username: resetForm.identifier.trim(),
+        password: "",
+      });
+      setResetForm({
+        identifier: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+      setIsResetOpen(false);
+    } catch (error) {
+      console.error("Password reset failed", error);
+      alert("Password reset failed. Check your roll number or email.");
+    } finally {
+      setIsResetting(false);
     }
   };
 
@@ -181,13 +226,83 @@ export default function Login() {
               </Button>
 
               <div className="text-center text-[#547792] text-sm">
-                <a href="#" className="hover:text-[#213448] transition-colors">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setResetForm((current) => ({
+                      ...current,
+                      identifier: credentials.username.trim(),
+                    }));
+                    setIsResetOpen(true);
+                  }}
+                  className="hover:text-[#213448] transition-colors"
+                >
                   Forgot Password?
-                </a>
+                </button>
               </div>
             </form>
           </CardContent>
         </Card>
+
+        <Dialog open={isResetOpen} onOpenChange={setIsResetOpen}>
+          <DialogContent className="bg-white border-2 border-[#94B4C1]">
+            <DialogHeader>
+              <DialogTitle className="text-[#213448]">Reset Password</DialogTitle>
+              <DialogDescription className="text-[#547792]">
+                Enter your {userType === "student" ? "roll number" : "email"} and choose a new password.
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleResetPassword} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="reset-identifier" className="text-[#213448]">
+                  {userType === "student" ? "Roll Number" : "Email"}
+                </Label>
+                <Input
+                  id="reset-identifier"
+                  value={resetForm.identifier}
+                  onChange={(e) => setResetForm({ ...resetForm, identifier: e.target.value })}
+                  className="bg-white border-[#94B4C1] text-[#213448]"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="reset-password" className="text-[#213448]">
+                  New Password
+                </Label>
+                <Input
+                  id="reset-password"
+                  type="password"
+                  value={resetForm.newPassword}
+                  onChange={(e) => setResetForm({ ...resetForm, newPassword: e.target.value })}
+                  className="bg-white border-[#94B4C1] text-[#213448]"
+                  minLength={6}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="reset-confirm-password" className="text-[#213448]">
+                  Confirm New Password
+                </Label>
+                <Input
+                  id="reset-confirm-password"
+                  type="password"
+                  value={resetForm.confirmPassword}
+                  onChange={(e) => setResetForm({ ...resetForm, confirmPassword: e.target.value })}
+                  className="bg-white border-[#94B4C1] text-[#213448]"
+                  minLength={6}
+                  required
+                />
+              </div>
+              <Button
+                type="submit"
+                disabled={isResetting}
+                className="w-full bg-gradient-to-r from-[#547792] to-[#94B4C1] hover:from-[#213448] hover:to-[#547792] text-white"
+              >
+                {isResetting ? "Resetting..." : "Reset Password"}
+              </Button>
+            </form>
+          </DialogContent>
+        </Dialog>
 
         {/* Footer */}
         <div className="text-center mt-8 text-[#547792] text-sm">
