@@ -25,6 +25,7 @@ Required environment variables:
 
 - `MONGODB_URI`: your MongoDB Atlas connection string
 - `JWT_SECRET`: any long random secret
+- `QR_SIGNING_SECRET`: another long random secret used to sign attendance QR payloads
 - `FRONTEND_URL`: your frontend Render URL, for example `https://smart-attendance-frontend.onrender.com`
 
 Optional environment variables:
@@ -35,6 +36,7 @@ Optional environment variables:
 - `SMTP_PASS`
 - `MAIL_FROM`
 - `ATTENDANCE_RADIUS_METERS`
+- `ATTENDANCE_MAX_ACCURACY_METERS`
 - `ALLOW_INSECURE_DEV_ATTENDANCE=false`
 
 Notes:
@@ -90,6 +92,7 @@ You still need to fill in the secret env vars manually:
 
 - `MONGODB_URI`
 - `JWT_SECRET`
+- `QR_SIGNING_SECRET`
 - `FRONTEND_URL`
 - `VITE_API_URL`
 - SMTP values if you use email

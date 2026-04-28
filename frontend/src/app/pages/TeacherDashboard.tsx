@@ -49,7 +49,6 @@ export default function TeacherDashboard() {
   const [selectedSection, setSelectedSection] = useState(mockSections[0].id);
   const [selectedSubject, setSelectedSubject] = useState(mockSections[0].subjects[0]);
   const [qrCode, setQrCode] = useState("");
-  const [qrToken, setQrToken] = useState("");
   const [qrTimer, setQrTimer] = useState(0);
   const [isQRActive, setIsQRActive] = useState(false);
   const [showUploadedMaterials, setShowUploadedMaterials] = useState(false);
@@ -185,7 +184,6 @@ useEffect(() => {
           if (prev <= 1) {
             setIsQRActive(false);
             setQrCode("");
-            setQrToken("");
             return 0;
           }
           return prev - 1;
@@ -215,7 +213,6 @@ useEffect(() => {
           });
 
           setQrCode(response.qrCodeDataUrl);
-          setQrToken(response.session.qrToken);
           setQrTimer(60);
           setIsQRActive(true);
         },
@@ -349,21 +346,6 @@ useEffect(() => {
                       <img src={qrCode} alt="Attendance QR Code" className="w-64 h-64" />
                     </div>
                     <div className="space-y-2">
-                      <div className="rounded-lg border border-[#94B4C1] bg-[#EAE0CF]/40 p-3">
-                        <div className="text-xs font-semibold uppercase tracking-wide text-[#547792]">
-                          Scan fallback token
-                        </div>
-                        <div className="mt-2 break-all rounded bg-white p-2 font-mono text-xs text-[#213448]">
-                          {qrToken}
-                        </div>
-                        <Button
-                          onClick={() => navigator.clipboard.writeText(qrToken)}
-                          variant="outline"
-                          className="mt-2 w-full border-[#547792] text-[#547792] hover:bg-[#547792]/10"
-                        >
-                          Copy Token
-                        </Button>
-                      </div>
                       <div className="flex justify-between items-center text-sm">
                         <span className="text-[#547792]">Time Remaining:</span>
                         <Badge

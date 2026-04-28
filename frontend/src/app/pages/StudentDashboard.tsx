@@ -121,7 +121,6 @@ export default function StudentDashboard() {
   const [selectedSubject, setSelectedSubject] = useState(mockAttendance.subjects[0].name);
   const [showScanner, setShowScanner] = useState(false);
   const [scannerError, setScannerError] = useState("");
-  const [scannerResult, setScannerResult] = useState("");
   const [isSubmittingScan, setIsSubmittingScan] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showDocuments, setShowDocuments] = useState(false);
@@ -150,7 +149,6 @@ export default function StudentDashboard() {
 
 }, []);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const qrScannerRef = useRef<any>(null);
 const [attendanceData, setAttendanceData] = useState<any>(null);
   const currentMonth = new Date();
   const monthStart = startOfMonth(currentMonth);
@@ -227,19 +225,72 @@ const subjects = attendanceData
       color: "bg-[#547792]"
     }))
   : mockAttendance.subjects;
+
+const getClientScanId = () => {
+  const storageKey = "attendance_client_scan_id";
+  const existing = localStorage.getItem(storageKey);
+
+  if (existing) return existing;
+
+  const generated =
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(16).slice(2)}-${Math.random().toString(16).slice(2)}`;
+
+  localStorage.setItem(storageKey, generated);
+  return generated;
+};
+
+const parseQrPayload = (data: any) => {
+  const rawValue = data?.text || data;
+
+  if (!rawValue || typeof rawValue !== "string") return null;
+
+  try {
+    const payload = JSON.parse(rawValue);
+
+    if (
+      payload?.type !== "attendance_qr" ||
+      !payload.sessionId ||
+      !payload.qrToken ||
+      !payload.signature ||
+      !payload.issuedAt ||
+      !payload.expiresAt
+    ) {
+      return null;
+    }
+
+    return payload;
+  } catch {
+    return null;
+  }
+};
+
 const handleScan = async (data: any) => {
 
-  const qrToken = data?.text || data;
+  const qrPayload = parseQrPayload(data);
 
-  if (!qrToken || isSubmittingScan) return;
+  if (!qrPayload || isSubmittingScan) {
+    if (data) setScannerError("Invalid attendance QR. Please scan the live QR shown by your teacher.");
+    return;
+  }
 
   setIsSubmittingScan(true);
-  setScannerResult(qrToken);
   setScannerError("");
 
-  const submitAttendance = async (payload: { qrToken: string; latitude?: number; longitude?: number }) => {
+  const submitAttendance = async (location: { latitude: number; longitude: number; accuracy?: number }) => {
     try {
-      await scanQr(payload);
+      await scanQr({
+        sessionId: qrPayload.sessionId,
+        qrToken: qrPayload.qrToken,
+        signature: qrPayload.signature,
+        issuedAt: qrPayload.issuedAt,
+        expiresAt: qrPayload.expiresAt,
+        latitude: location.latitude,
+        longitude: location.longitude,
+        accuracy: location.accuracy,
+        clientScanId: getClientScanId(),
+      });
 
       const refreshedAttendance = await getMyAttendance();
       setAttendanceData(refreshedAttendance);
@@ -247,10 +298,9 @@ const handleScan = async (data: any) => {
       alert("Attendance marked successfully");
 
       setShowScanner(false);
-      setScannerResult("");
     } catch (error) {
       console.error(error);
-      setScannerError("QR code invalid, expired, already used, or for a different section");
+      setScannerError("QR invalid, expired, outside class location, already used, or blocked by anti-proxy checks");
       alert("Attendance could not be marked");
     } finally {
       setIsSubmittingScan(false);
@@ -258,24 +308,24 @@ const handleScan = async (data: any) => {
   };
 
   if (!navigator.geolocation || !window.isSecureContext) {
-    setScannerError("Location is unavailable on local HTTP, using development fallback");
-    submitAttendance({ qrToken });
+    setScannerError("Camera and GPS attendance require HTTPS or localhost. Please open this app from a secure URL.");
+    setIsSubmittingScan(false);
     return;
   }
 
   navigator.geolocation.getCurrentPosition(async (position) => {
     submitAttendance({
-      qrToken,
       latitude: position.coords.latitude,
-      longitude: position.coords.longitude
+      longitude: position.coords.longitude,
+      accuracy: position.coords.accuracy
     });
   }, (error) => {
 
     console.error(error);
-    setScannerError("Location unavailable, using development fallback");
-    submitAttendance({ qrToken });
+    setScannerError("Location permission is required to mark attendance");
+    setIsSubmittingScan(false);
 
-  });
+  }, { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 });
 
 };
   const handleError = (err: any) => {
@@ -370,7 +420,7 @@ const handleScan = async (data: any) => {
                   Mark Attendance
                 </CardTitle>
                 <CardDescription className="text-[#547792]">
-                  Scan the teacher QR on Android/Chrome, or use image upload/token fallback
+                  Scan the live QR shown by your teacher. GPS verification is required.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -387,7 +437,6 @@ const handleScan = async (data: any) => {
                     {canUseCameraScanner ? (
                       <div className="overflow-hidden rounded-lg border-2 border-[#94B4C1] bg-black">
                         <QrScanner
-                          ref={qrScannerRef}
                           delay={300}
                           constraints={{
                             audio: false,
@@ -400,33 +449,12 @@ const handleScan = async (data: any) => {
                       </div>
                     ) : (
                       <div className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800">
-                        Camera scanning is unavailable on this page because phone browsers only allow camera access on
-                        `https` or `localhost`. Use `Upload QR Image` or paste the token instead.
+                        Camera scanning needs HTTPS or localhost. Open the app from a secure URL and scan the live teacher QR.
                       </div>
                     )}
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="w-full border-[#547792] text-[#547792] hover:bg-[#94B4C1]/20"
-                      onClick={() => qrScannerRef.current?.openImageDialog?.()}
-                    >
-                      Upload QR Image
-                    </Button>
-                    <input
-                      type="text"
-                      value={scannerResult}
-                      onChange={(e) => setScannerResult(e.target.value)}
-                      placeholder="Paste QR token here if needed"
-                      className="w-full rounded-md border border-[#94B4C1] px-3 py-2 text-sm text-[#213448] outline-none focus:border-[#547792]"
-                    />
-                    <Button
-                      type="button"
-                      onClick={() => handleScan(scannerResult)}
-                      disabled={!scannerResult || isSubmittingScan}
-                      className="w-full bg-gradient-to-r from-[#547792] to-[#94B4C1] hover:from-[#213448] hover:to-[#547792] text-white"
-                    >
-                      {isSubmittingScan ? "Marking..." : "Submit Token"}
-                    </Button>
+                    {isSubmittingScan && (
+                      <p className="text-[#547792] text-sm">Verifying QR and location...</p>
+                    )}
                     {scannerError && (
                       <p className="text-red-600 text-sm">{scannerError}</p>
                     )}
@@ -434,7 +462,6 @@ const handleScan = async (data: any) => {
                       onClick={() => {
                         setShowScanner(false);
                         setScannerError("");
-                        setScannerResult("");
                       }}
                       variant="outline"
                       className="w-full border-[#547792] text-[#547792] hover:bg-[#94B4C1]/20"

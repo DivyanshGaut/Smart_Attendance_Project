@@ -149,9 +149,15 @@ export const login = async (
 };
 
 export const scanQr = async (data: {
+  sessionId: string;
   qrToken: string;
-  latitude?: number;
-  longitude?: number;
+  signature: string;
+  issuedAt: string;
+  expiresAt: string;
+  latitude: number;
+  longitude: number;
+  accuracy?: number;
+  clientScanId: string;
 }) => {
   const response = await api.post("/student/scan-qr", data);
   return response.data;
@@ -174,7 +180,6 @@ export const generateQr = async (data: {
     qrCodeDataUrl: string;
     session: {
       id: string;
-      qrToken: string;
       subject: string;
       section: string;
       expiryTime: string;

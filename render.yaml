@@ -13,6 +13,8 @@ services:
         sync: false
       - key: JWT_SECRET
         sync: false
+      - key: QR_SIGNING_SECRET
+        sync: false
       - key: FRONTEND_URL
         sync: false
       - key: SMTP_HOST
@@ -27,6 +29,8 @@ services:
         sync: false
       - key: ATTENDANCE_RADIUS_METERS
         value: "100"
+      - key: ATTENDANCE_MAX_ACCURACY_METERS
+        value: "150"
       - key: ALLOW_INSECURE_DEV_ATTENDANCE
         value: "false"
 
