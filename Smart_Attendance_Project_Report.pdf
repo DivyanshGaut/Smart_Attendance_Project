@@ -1,0 +1,922 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+2 0 obj
+<< /Type /Catalog /Pages 3 0 R >>
+endobj
+3 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R 8 0 R 10 0 R 12 0 R 14 0 R 16 0 R 18 0 R 20 0 R 22 0 R 24 0 R 26 0 R 28 0 R 30 0 R 32 0 R 34 0 R 36 0 R] /Count 17 >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 3 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 38 0 R /F3 39 0 R >> >> /Contents 5 0 R >>
+endobj
+5 0 obj
+<< /Length 3148 >>
+stream
+BT /F2 9 Tf 54 808 Td (Smart Attendance and Proxy Detection System) Tj ET
+54 798 m 541 798 l S
+BT /F2 18 Tf 54 782 Td (Smart Attendance and Proxy Detection System) Tj ET
+BT /F1 10 Tf 54 753 Td (Project documentation, architecture notes, flow explanation, tech stack summary, and) Tj ET
+BT /F1 10 Tf 54 739 Td (viva/interview preparation.) Tj ET
+BT /F1 10 Tf 54 716 Td (Generated for: Smart_Attendance_Project) Tj ET
+BT /F1 10 Tf 54 700 Td (Prepared on: 29 April 2026) Tj ET
+54 677 m 541 677 l S
+BT /F2 13 Tf 54 652 Td (1. Project Overview) Tj ET
+BT /F1 10 Tf 54 626 Td (Smart Attendance and Proxy Detection System is a MERN-style web application for managing) Tj ET
+BT /F1 10 Tf 54 612 Td (student attendance using short-lived QR codes and location verification. The system has) Tj ET
+BT /F1 10 Tf 54 598 Td (three main user roles:) Tj ET
+BT /F1 10 Tf 66 575 Td (- Student: scans attendance QR codes, views personal attendance, uploads assignments,) Tj ET
+BT /F1 10 Tf 66 561 Td (  downloads study material, and checks timetable.) Tj ET
+BT /F1 10 Tf 66 545 Td (- Teacher: generates live QR codes for a selected subject and section, monitors) Tj ET
+BT /F1 10 Tf 66 531 Td (  attendance, exports reports, views defaulters, and uploads study material.) Tj ET
+BT /F1 10 Tf 66 515 Td (- Admin: monitors overall attendance statistics, QR validation history, section/subject) Tj ET
+BT /F1 10 Tf 66 501 Td (  analytics, teacher/student counts, and defaulter summaries.) Tj ET
+BT /F1 10 Tf 54 478 Td (The main idea is to reduce proxy attendance by combining:) Tj ET
+BT /F1 10 Tf 66 455 Td (- Authenticated user identity through JWT.) Tj ET
+BT /F1 10 Tf 66 439 Td (- QR payloads signed using HMAC.) Tj ET
+BT /F1 10 Tf 66 423 Td (- Short QR expiry windows.) Tj ET
+BT /F1 10 Tf 66 407 Td (- Teacher location captured during QR generation.) Tj ET
+BT /F1 10 Tf 66 391 Td (- Student GPS location captured during scan.) Tj ET
+BT /F1 10 Tf 66 375 Td (- Radius-based distance validation.) Tj ET
+BT /F1 10 Tf 66 359 Td (- Duplicate scan prevention per QR session and subject/day.) Tj ET
+BT /F1 10 Tf 66 343 Td (- Client device scan identifier checks.) Tj ET
+54 320 m 541 320 l S
+BT /F2 13 Tf 54 295 Td (2. Main Objectives) Tj ET
+BT /F1 10 Tf 66 269 Td (- Digitize class attendance marking.) Tj ET
+BT /F1 10 Tf 66 253 Td (- Prevent students from marking attendance for absent classmates.) Tj ET
+BT /F1 10 Tf 66 237 Td (- Provide separate dashboards for students, teachers, and administrators.) Tj ET
+BT /F1 10 Tf 66 221 Td (- Generate subject-wise and monthly attendance reports.) Tj ET
+BT /F1 10 Tf 66 205 Td (- Identify students below required attendance thresholds.) Tj ET
+BT /F1 10 Tf 66 189 Td (- Maintain QR validation logs for administrative monitoring.) Tj ET
+BT /F1 10 Tf 66 173 Td (- Support study material and assignment document workflows.) Tj ET
+BT /F1 10 Tf 66 157 Td (- Keep the application deployable on Render with MongoDB Atlas.) Tj ET
+54 134 m 541 134 l S
+BT /F2 13 Tf 54 109 Td (3. High-Level Architecture) Tj ET
+BT /F1 10 Tf 54 83 Td (The system follows a client-server architecture:) Tj ET
+54 42 m 541 42 l S
+BT /F1 9 Tf 497 28 Td (Page 1) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 3 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 38 0 R /F3 39 0 R >> >> /Contents 7 0 R >>
+endobj
+7 0 obj
+<< /Length 2557 >>
+stream
+BT /F2 9 Tf 54 808 Td (Smart Attendance and Proxy Detection System) Tj ET
+54 798 m 541 798 l S
+BT /F3 9 Tf 66 785 Td (React/Vite Frontend) Tj ET
+BT /F3 9 Tf 66 771 Td (        |) Tj ET
+BT /F3 9 Tf 66 757 Td (        | HTTPS API calls using Axios) Tj ET
+BT /F3 9 Tf 66 743 Td (        v) Tj ET
+BT /F3 9 Tf 66 729 Td (Express.js Backend API) Tj ET
+BT /F3 9 Tf 66 715 Td (        |) Tj ET
+BT /F3 9 Tf 66 701 Td (        | Mongoose ODM) Tj ET
+BT /F3 9 Tf 66 687 Td (        v) Tj ET
+BT /F3 9 Tf 66 673 Td (MongoDB Database) Tj ET
+BT /F1 10 Tf 54 647 Td (Additional backend services:) Tj ET
+BT /F1 10 Tf 66 624 Td (- JWT authentication for all protected APIs.) Tj ET
+BT /F1 10 Tf 66 608 Td (- Joi request validation for important inputs.) Tj ET
+BT /F1 10 Tf 66 592 Td (- Multer file upload handling.) Tj ET
+BT /F1 10 Tf 66 576 Td (- Nodemailer for low attendance warning email flow.) Tj ET
+BT /F1 10 Tf 66 560 Td (- QRCode library for QR image generation.) Tj ET
+BT /F1 10 Tf 66 544 Td (- HMAC SHA-256 for QR payload signing.) Tj ET
+BT /F1 10 Tf 66 528 Td (- Express rate limiting for auth/API/QR scan protection.) Tj ET
+54 505 m 541 505 l S
+BT /F2 13 Tf 54 480 Td (4. Folder Structure) Tj ET
+BT /F3 9 Tf 66 449 Td (Smart_Attendance_Project/) Tj ET
+BT /F3 9 Tf 66 435 Td (  backend/) Tj ET
+BT /F3 9 Tf 66 421 Td (    package.json) Tj ET
+BT /F3 9 Tf 66 407 Td (    server/) Tj ET
+BT /F3 9 Tf 66 393 Td (      server.js) Tj ET
+BT /F3 9 Tf 66 379 Td (      config/db.js) Tj ET
+BT /F3 9 Tf 66 365 Td (      controllers/) Tj ET
+BT /F3 9 Tf 66 351 Td (      middleware/) Tj ET
+BT /F3 9 Tf 66 337 Td (      models/) Tj ET
+BT /F3 9 Tf 66 323 Td (      routes/) Tj ET
+BT /F3 9 Tf 66 309 Td (      utils/) Tj ET
+BT /F3 9 Tf 66 295 Td (      seedAdmin.js) Tj ET
+BT /F3 9 Tf 66 281 Td (      seedStudent.js) Tj ET
+BT /F3 9 Tf 66 267 Td (      seedTeacher.js) Tj ET
+BT /F3 9 Tf 66 253 Td (      seedTimetable.js) Tj ET
+BT /F3 9 Tf 66 239 Td (      migrateStudentSections.js) Tj ET
+BT /F3 9 Tf 66 225 Td (    uploads/) Tj ET
+BT /F3 9 Tf 66 211 Td (  frontend/) Tj ET
+BT /F3 9 Tf 66 197 Td (    package.json) Tj ET
+BT /F3 9 Tf 66 183 Td (    src/) Tj ET
+BT /F3 9 Tf 66 169 Td (      main.tsx) Tj ET
+BT /F3 9 Tf 66 155 Td (      config.js) Tj ET
+BT /F3 9 Tf 66 141 Td (      services/) Tj ET
+BT /F3 9 Tf 66 127 Td (      app/) Tj ET
+BT /F3 9 Tf 66 113 Td (        App.tsx) Tj ET
+BT /F3 9 Tf 66 99 Td (        routes.ts) Tj ET
+BT /F3 9 Tf 66 85 Td (        pages/) Tj ET
+BT /F3 9 Tf 66 71 Td (        components/ui/) Tj ET
+54 42 m 541 42 l S
+BT /F1 9 Tf 497 28 Td (Page 2) Tj ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 3 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 38 0 R /F3 39 0 R >> >> /Contents 9 0 R >>
+endobj
+9 0 obj
+<< /Length 2588 >>
+stream
+BT /F2 9 Tf 54 808 Td (Smart Attendance and Proxy Detection System) Tj ET
+54 798 m 541 798 l S
+BT /F3 9 Tf 66 790 Td (      styles/) Tj ET
+BT /F3 9 Tf 66 776 Td (  render.yaml) Tj ET
+BT /F3 9 Tf 66 762 Td (  DEPLOY_RENDER.md) Tj ET
+54 736 m 541 736 l S
+BT /F2 13 Tf 54 711 Td (5. Tech Stack) Tj ET
+BT /F2 11 Tf 54 685 Td (Frontend) Tj ET
+BT /F1 10 Tf 66 661 Td (- React with TypeScript.) Tj ET
+BT /F1 10 Tf 66 645 Td (- Vite as the build tool and development server.) Tj ET
+BT /F1 10 Tf 66 629 Td (- React Router for client-side routing.) Tj ET
+BT /F1 10 Tf 66 613 Td (- Axios for API communication.) Tj ET
+BT /F1 10 Tf 66 597 Td (- Tailwind CSS and component utilities for styling.) Tj ET
+BT /F1 10 Tf 66 581 Td (- Radix UI based components.) Tj ET
+BT /F1 10 Tf 66 565 Td (- Lucide React icons.) Tj ET
+BT /F1 10 Tf 66 549 Td (- Recharts for admin analytics charts.) Tj ET
+BT /F1 10 Tf 66 533 Td (- react-qr-scanner for scanning QR codes.) Tj ET
+BT /F1 10 Tf 66 517 Td (- date-fns for date formatting and calendar helpers.) Tj ET
+BT /F2 11 Tf 54 494 Td (Backend) Tj ET
+BT /F1 10 Tf 66 470 Td (- Node.js runtime.) Tj ET
+BT /F1 10 Tf 66 454 Td (- Express.js for REST APIs.) Tj ET
+BT /F1 10 Tf 66 438 Td (- MongoDB as the database.) Tj ET
+BT /F1 10 Tf 66 422 Td (- Mongoose for schema modeling and queries.) Tj ET
+BT /F1 10 Tf 66 406 Td (- bcrypt for password hashing.) Tj ET
+BT /F1 10 Tf 66 390 Td (- jsonwebtoken for JWT login sessions.) Tj ET
+BT /F1 10 Tf 66 374 Td (- Joi for request validation.) Tj ET
+BT /F1 10 Tf 66 358 Td (- qrcode for QR image generation.) Tj ET
+BT /F1 10 Tf 66 342 Td (- crypto module for HMAC QR signatures.) Tj ET
+BT /F1 10 Tf 66 326 Td (- multer for uploads.) Tj ET
+BT /F1 10 Tf 66 310 Td (- helmet for basic HTTP security headers.) Tj ET
+BT /F1 10 Tf 66 294 Td (- cors for frontend-backend communication.) Tj ET
+BT /F1 10 Tf 66 278 Td (- express-rate-limit for abuse protection.) Tj ET
+BT /F1 10 Tf 66 262 Td (- morgan for request logging.) Tj ET
+BT /F1 10 Tf 66 246 Td (- nodemailer for email warnings.) Tj ET
+BT /F2 11 Tf 54 223 Td (Deployment) Tj ET
+BT /F1 10 Tf 66 199 Td (- Render web service for backend.) Tj ET
+BT /F1 10 Tf 66 183 Td (- Render static site for frontend.) Tj ET
+BT /F1 10 Tf 66 167 Td (- MongoDB Atlas or another hosted MongoDB service.) Tj ET
+BT /F1 10 Tf 66 151 Td (- Environment variables for secrets and URLs.) Tj ET
+54 128 m 541 128 l S
+BT /F2 13 Tf 54 103 Td (6. Backend Architecture) Tj ET
+BT /F1 10 Tf 54 77 Td (The backend entry point is `backend/server/server.js`.) Tj ET
+54 42 m 541 42 l S
+BT /F1 9 Tf 497 28 Td (Page 3) Tj ET
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 3 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 38 0 R /F3 39 0 R >> >> /Contents 11 0 R >>
+endobj
+11 0 obj
+<< /Length 2755 >>
+stream
+BT /F2 9 Tf 54 808 Td (Smart Attendance and Proxy Detection System) Tj ET
+54 798 m 541 798 l S
+BT /F1 10 Tf 54 783 Td (Responsibilities:) Tj ET
+BT /F1 10 Tf 66 760 Td (- Load environment variables.) Tj ET
+BT /F1 10 Tf 66 744 Td (- Create the Express app.) Tj ET
+BT /F1 10 Tf 66 728 Td (- Configure security middleware: Helmet, CORS, JSON parser, Morgan.) Tj ET
+BT /F1 10 Tf 66 712 Td (- Serve uploaded files from `/uploads`.) Tj ET
+BT /F1 10 Tf 66 696 Td (- Connect to MongoDB.) Tj ET
+BT /F1 10 Tf 66 680 Td (- Mount route groups under `/api`.) Tj ET
+BT /F1 10 Tf 66 664 Td (- Register centralized error handling.) Tj ET
+BT /F1 10 Tf 66 648 Td (- Start the HTTP server.) Tj ET
+BT /F1 10 Tf 54 625 Td (Main route groups:) Tj ET
+BT /F1 10 Tf 66 602 Td (- `/api/auth`: login and password reset.) Tj ET
+BT /F1 10 Tf 66 586 Td (- `/api/student`: student QR scan and personal attendance.) Tj ET
+BT /F1 10 Tf 66 570 Td (- `/api/teacher`: QR generation and teacher-facing report APIs.) Tj ET
+BT /F1 10 Tf 66 554 Td (- `/api/admin`: reports, analytics, summaries, QR validations.) Tj ET
+BT /F1 10 Tf 66 538 Td (- `/api/timetable`: timetable read/create APIs.) Tj ET
+BT /F1 10 Tf 66 522 Td (- `/api/documents`: document upload and document/material listing.) Tj ET
+BT /F1 10 Tf 66 506 Td (- `/api/health`: health check endpoint.) Tj ET
+54 483 m 541 483 l S
+BT /F2 13 Tf 54 458 Td (7. Frontend Architecture) Tj ET
+BT /F1 10 Tf 54 432 Td (The frontend entry point is `frontend/src/main.tsx`, with routes defined in) Tj ET
+BT /F1 10 Tf 54 418 Td (`frontend/src/app/routes.ts`.) Tj ET
+BT /F1 10 Tf 54 395 Td (Routes:) Tj ET
+BT /F1 10 Tf 66 372 Td (- `/`: login page.) Tj ET
+BT /F1 10 Tf 66 356 Td (- `/student`: student dashboard.) Tj ET
+BT /F1 10 Tf 66 340 Td (- `/teacher`: teacher dashboard.) Tj ET
+BT /F1 10 Tf 66 324 Td (- `/admin`: admin dashboard.) Tj ET
+BT /F1 10 Tf 54 301 Td (API services are centralized in `frontend/src/services/api.ts`.) Tj ET
+BT /F1 10 Tf 54 278 Td (Important frontend behavior:) Tj ET
+BT /F1 10 Tf 66 255 Td (- Axios uses `VITE_API_URL` or `/api` as the base URL.) Tj ET
+BT /F1 10 Tf 66 239 Td (- JWT is stored in local storage after login.) Tj ET
+BT /F1 10 Tf 66 223 Td (- Axios request interceptor attaches `Authorization: Bearer <token>`.) Tj ET
+BT /F1 10 Tf 66 207 Td (- Each dashboard calls its related backend APIs.) Tj ET
+BT /F1 10 Tf 66 191 Td (- Student QR scanning requires camera access and browser geolocation.) Tj ET
+BT /F1 10 Tf 66 175 Td (- Teacher QR generation requires geolocation.) Tj ET
+54 152 m 541 152 l S
+BT /F2 13 Tf 54 127 Td (8. Database Models) Tj ET
+BT /F2 11 Tf 54 101 Td (Admin) Tj ET
+BT /F1 10 Tf 54 77 Td (Stores admin identity and password.) Tj ET
+54 42 m 541 42 l S
+BT /F1 9 Tf 497 28 Td (Page 4) Tj ET
+endstream
+endobj
+12 0 obj
+<< /Type /Page /Parent 3 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 38 0 R /F3 39 0 R >> >> /Contents 13 0 R >>
+endobj
+13 0 obj
+<< /Length 1905 >>
+stream
+BT /F2 9 Tf 54 808 Td (Smart Attendance and Proxy Detection System) Tj ET
+54 798 m 541 798 l S
+BT /F1 10 Tf 54 783 Td (Fields:) Tj ET
+BT /F1 10 Tf 66 760 Td (- adminName) Tj ET
+BT /F1 10 Tf 66 744 Td (- email) Tj ET
+BT /F1 10 Tf 66 728 Td (- password) Tj ET
+BT /F1 10 Tf 66 712 Td (- role) Tj ET
+BT /F1 10 Tf 66 696 Td (- timestamps) Tj ET
+BT /F1 10 Tf 54 673 Td (Password is hashed with bcrypt before save.) Tj ET
+BT /F2 11 Tf 54 650 Td (Teacher) Tj ET
+BT /F1 10 Tf 54 626 Td (Stores teacher identity and subject information.) Tj ET
+BT /F1 10 Tf 54 603 Td (Fields:) Tj ET
+BT /F1 10 Tf 66 580 Td (- teacherName) Tj ET
+BT /F1 10 Tf 66 564 Td (- teacherId) Tj ET
+BT /F1 10 Tf 66 548 Td (- email) Tj ET
+BT /F1 10 Tf 66 532 Td (- subject) Tj ET
+BT /F1 10 Tf 66 516 Td (- password) Tj ET
+BT /F1 10 Tf 66 500 Td (- role) Tj ET
+BT /F1 10 Tf 66 484 Td (- timestamps) Tj ET
+BT /F1 10 Tf 54 461 Td (Password is hashed with bcrypt before save.) Tj ET
+BT /F2 11 Tf 54 438 Td (Student) Tj ET
+BT /F1 10 Tf 54 414 Td (Stores student identity and section.) Tj ET
+BT /F1 10 Tf 54 391 Td (Fields:) Tj ET
+BT /F1 10 Tf 66 368 Td (- SrNo) Tj ET
+BT /F1 10 Tf 66 352 Td (- studentName) Tj ET
+BT /F1 10 Tf 66 336 Td (- rollNo) Tj ET
+BT /F1 10 Tf 66 320 Td (- section) Tj ET
+BT /F1 10 Tf 66 304 Td (- password) Tj ET
+BT /F1 10 Tf 66 288 Td (- role) Tj ET
+BT /F1 10 Tf 66 272 Td (- timestamps) Tj ET
+BT /F1 10 Tf 54 249 Td (Password is hashed with bcrypt before save.) Tj ET
+BT /F2 11 Tf 54 226 Td (QrSession) Tj ET
+BT /F1 10 Tf 54 202 Td (Stores one live attendance QR session.) Tj ET
+BT /F1 10 Tf 54 179 Td (Fields:) Tj ET
+BT /F1 10 Tf 66 156 Td (- teacherId) Tj ET
+BT /F1 10 Tf 66 140 Td (- subject) Tj ET
+BT /F1 10 Tf 66 124 Td (- section) Tj ET
+BT /F1 10 Tf 66 108 Td (- qrToken) Tj ET
+BT /F1 10 Tf 66 92 Td (- expiryTime) Tj ET
+BT /F1 10 Tf 66 76 Td (- latitude) Tj ET
+54 42 m 541 42 l S
+BT /F1 9 Tf 497 28 Td (Page 5) Tj ET
+endstream
+endobj
+14 0 obj
+<< /Type /Page /Parent 3 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 38 0 R /F3 39 0 R >> >> /Contents 15 0 R >>
+endobj
+15 0 obj
+<< /Length 2136 >>
+stream
+BT /F2 9 Tf 54 808 Td (Smart Attendance and Proxy Detection System) Tj ET
+54 798 m 541 798 l S
+BT /F1 10 Tf 66 790 Td (- longitude) Tj ET
+BT /F1 10 Tf 66 774 Td (- isActive) Tj ET
+BT /F1 10 Tf 66 758 Td (- timestamps) Tj ET
+BT /F1 10 Tf 54 735 Td (The QR token is unique. Old active sessions for the same teacher/subject/section are) Tj ET
+BT /F1 10 Tf 54 721 Td (deactivated before creating a new one.) Tj ET
+BT /F2 11 Tf 54 698 Td (Attendance) Tj ET
+BT /F1 10 Tf 54 674 Td (Stores attendance records.) Tj ET
+BT /F1 10 Tf 54 651 Td (Fields:) Tj ET
+BT /F1 10 Tf 66 628 Td (- studentId) Tj ET
+BT /F1 10 Tf 66 612 Td (- qrSessionId) Tj ET
+BT /F1 10 Tf 66 596 Td (- section) Tj ET
+BT /F1 10 Tf 66 580 Td (- subject) Tj ET
+BT /F1 10 Tf 66 564 Td (- date) Tj ET
+BT /F1 10 Tf 66 548 Td (- time) Tj ET
+BT /F1 10 Tf 66 532 Td (- location: latitude, longitude, ipAddress) Tj ET
+BT /F1 10 Tf 66 516 Td (- scanMetadata: clientScanId, userAgent, accuracy) Tj ET
+BT /F1 10 Tf 66 500 Td (- status) Tj ET
+BT /F1 10 Tf 66 484 Td (- timestamps) Tj ET
+BT /F1 10 Tf 54 461 Td (Important indexes:) Tj ET
+BT /F1 10 Tf 66 438 Td (- Unique attendance per student, subject, and date.) Tj ET
+BT /F1 10 Tf 66 422 Td (- Unique attendance per student and QR session.) Tj ET
+BT /F1 10 Tf 66 406 Td (- QR session + client scan ID index for proxy detection.) Tj ET
+BT /F2 11 Tf 54 383 Td (Timetable) Tj ET
+BT /F1 10 Tf 54 359 Td (Stores scheduled classes.) Tj ET
+BT /F1 10 Tf 54 336 Td (Fields:) Tj ET
+BT /F1 10 Tf 66 313 Td (- subject) Tj ET
+BT /F1 10 Tf 66 297 Td (- teacherId) Tj ET
+BT /F1 10 Tf 66 281 Td (- dayOfWeek) Tj ET
+BT /F1 10 Tf 66 265 Td (- startTime) Tj ET
+BT /F1 10 Tf 66 249 Td (- endTime) Tj ET
+BT /F1 10 Tf 66 233 Td (- room) Tj ET
+BT /F1 10 Tf 66 217 Td (- batch) Tj ET
+BT /F1 10 Tf 66 201 Td (- timestamps) Tj ET
+BT /F2 11 Tf 54 178 Td (Document) Tj ET
+BT /F1 10 Tf 54 154 Td (Stores uploaded assignment/material metadata.) Tj ET
+BT /F1 10 Tf 54 131 Td (Fields:) Tj ET
+BT /F1 10 Tf 66 108 Td (- title) Tj ET
+BT /F1 10 Tf 66 92 Td (- subject) Tj ET
+BT /F1 10 Tf 66 76 Td (- studentId) Tj ET
+54 42 m 541 42 l S
+BT /F1 9 Tf 497 28 Td (Page 6) Tj ET
+endstream
+endobj
+16 0 obj
+<< /Type /Page /Parent 3 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 38 0 R /F3 39 0 R >> >> /Contents 17 0 R >>
+endobj
+17 0 obj
+<< /Length 3131 >>
+stream
+BT /F2 9 Tf 54 808 Td (Smart Attendance and Proxy Detection System) Tj ET
+54 798 m 541 798 l S
+BT /F1 10 Tf 66 790 Td (- uploadedBy) Tj ET
+BT /F1 10 Tf 66 774 Td (- fileUrl) Tj ET
+BT /F1 10 Tf 66 758 Td (- fileName) Tj ET
+BT /F1 10 Tf 66 742 Td (- timestamps) Tj ET
+54 719 m 541 719 l S
+BT /F2 13 Tf 54 694 Td (9. Authentication and Authorization Flow) Tj ET
+BT /F1 10 Tf 62 668 Td (1. User selects a role on the login page: student, teacher, or admin.) Tj ET
+BT /F1 10 Tf 62 652 Td (2. Student logs in with roll number. Teacher/admin logs in with email.) Tj ET
+BT /F1 10 Tf 62 636 Td (3. Backend validates request with Joi.) Tj ET
+BT /F1 10 Tf 62 620 Td (4. Backend finds the matching user model based on role.) Tj ET
+BT /F1 10 Tf 62 604 Td (5. bcrypt compares the submitted password with the stored hash.) Tj ET
+BT /F1 10 Tf 62 588 Td (6. On success, backend signs a JWT containing user ID and role.) Tj ET
+BT /F1 10 Tf 62 572 Td (7. Frontend stores token and user object in local storage.) Tj ET
+BT /F1 10 Tf 62 556 Td (8. Frontend redirects user to the correct dashboard.) Tj ET
+BT /F1 10 Tf 62 540 Td (9. Protected APIs use `authenticate` middleware to verify JWT.) Tj ET
+BT /F1 10 Tf 62 524 Td (10. Role-specific APIs use `authorize\(...\)` middleware.) Tj ET
+54 501 m 541 501 l S
+BT /F2 13 Tf 54 476 Td (10. QR Attendance Flow) Tj ET
+BT /F2 11 Tf 54 450 Td (Teacher Side) Tj ET
+BT /F1 10 Tf 62 426 Td (1. Teacher logs in and opens the Teacher Dashboard.) Tj ET
+BT /F1 10 Tf 62 410 Td (2. Teacher selects section and subject.) Tj ET
+BT /F1 10 Tf 62 394 Td (3. Teacher clicks Generate QR Code.) Tj ET
+BT /F1 10 Tf 62 378 Td (4. Browser asks for teacher location.) Tj ET
+BT /F1 10 Tf 62 362 Td (5. Frontend sends subject, section, latitude, longitude, and expiry seconds to backend.) Tj ET
+BT /F1 10 Tf 62 346 Td (6. Backend validates the request.) Tj ET
+BT /F1 10 Tf 62 330 Td (7. Backend deactivates old active sessions for the same teacher/subject/section.) Tj ET
+BT /F1 10 Tf 62 314 Td (8. Backend creates a new `QrSession`.) Tj ET
+BT /F1 10 Tf 62 298 Td (9. Backend creates a signed QR payload with session metadata.) Tj ET
+BT /F1 10 Tf 62 282 Td (10. Backend converts the signed payload to a QR image data URL.) Tj ET
+BT /F1 10 Tf 62 266 Td (11. Frontend displays the QR and starts a countdown timer.) Tj ET
+BT /F2 11 Tf 54 243 Td (Student Side) Tj ET
+BT /F1 10 Tf 62 219 Td (1. Student logs in and opens the Student Dashboard.) Tj ET
+BT /F1 10 Tf 62 203 Td (2. Student clicks Open Scanner.) Tj ET
+BT /F1 10 Tf 62 187 Td (3. Browser requests camera access.) Tj ET
+BT /F1 10 Tf 62 171 Td (4. Student scans the teacher's live QR code.) Tj ET
+BT /F1 10 Tf 62 155 Td (5. Frontend parses the QR JSON payload.) Tj ET
+BT /F1 10 Tf 62 139 Td (6. Browser requests student GPS location.) Tj ET
+BT /F1 10 Tf 62 123 Td (7. Frontend sends QR payload fields, student location, GPS accuracy, and client scan ID.) Tj ET
+BT /F1 10 Tf 62 107 Td (8. Backend verifies:) Tj ET
+BT /F1 10 Tf 66 91 Td (- JWT belongs to a student.) Tj ET
+BT /F1 10 Tf 66 75 Td (- QR session exists.) Tj ET
+54 42 m 541 42 l S
+BT /F1 9 Tf 497 28 Td (Page 7) Tj ET
+endstream
+endobj
+18 0 obj
+<< /Type /Page /Parent 3 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 38 0 R /F3 39 0 R >> >> /Contents 19 0 R >>
+endobj
+19 0 obj
+<< /Length 3152 >>
+stream
+BT /F2 9 Tf 54 808 Td (Smart Attendance and Proxy Detection System) Tj ET
+54 798 m 541 798 l S
+BT /F1 10 Tf 66 790 Td (- QR session is active.) Tj ET
+BT /F1 10 Tf 66 774 Td (- QR has not expired.) Tj ET
+BT /F1 10 Tf 66 758 Td (- QR payload expiry matches the stored session.) Tj ET
+BT /F1 10 Tf 66 742 Td (- QR HMAC signature is valid.) Tj ET
+BT /F1 10 Tf 66 726 Td (- Student belongs to the QR section.) Tj ET
+BT /F1 10 Tf 66 710 Td (- GPS accuracy is acceptable.) Tj ET
+BT /F1 10 Tf 66 694 Td (- Student is within allowed radius of teacher location.) Tj ET
+BT /F1 10 Tf 66 678 Td (- Same device was not already used for another student in the same session.) Tj ET
+BT /F1 10 Tf 66 662 Td (- Student has not already marked attendance for that session.) Tj ET
+BT /F1 10 Tf 66 646 Td (- Student has not already marked attendance for the subject on the same day.) Tj ET
+BT /F1 10 Tf 62 630 Td (9. Backend creates the attendance record.) Tj ET
+BT /F1 10 Tf 62 614 Td (10. Frontend refreshes attendance data and shows success.) Tj ET
+54 591 m 541 591 l S
+BT /F2 13 Tf 54 566 Td (11. Proxy Detection Logic) Tj ET
+BT /F1 10 Tf 54 540 Td (The project uses several checks together instead of depending on only one check:) Tj ET
+BT /F1 10 Tf 66 517 Td (- Short-lived QR code: expiry is limited by backend validation.) Tj ET
+BT /F1 10 Tf 66 501 Td (- Signed QR payload: HMAC prevents tampering with session ID, subject, section, token,) Tj ET
+BT /F1 10 Tf 66 487 Td (  issue time, and expiry time.) Tj ET
+BT /F1 10 Tf 66 471 Td (- Teacher location: stored when QR is generated.) Tj ET
+BT /F1 10 Tf 66 455 Td (- Student location: captured when scanning QR.) Tj ET
+BT /F1 10 Tf 66 439 Td (- Radius check: Haversine distance compares teacher and student coordinates.) Tj ET
+BT /F1 10 Tf 66 423 Td (- GPS accuracy threshold: rejects scans with low location accuracy.) Tj ET
+BT /F1 10 Tf 66 407 Td (- Duplicate session check: one student cannot mark the same QR session twice.) Tj ET
+BT /F1 10 Tf 66 391 Td (- Duplicate subject/day check: one student cannot mark the same subject twice on the) Tj ET
+BT /F1 10 Tf 66 377 Td (  same date.) Tj ET
+BT /F1 10 Tf 66 361 Td (- Client scan ID check: same browser/device identifier cannot mark attendance for) Tj ET
+BT /F1 10 Tf 66 347 Td (  multiple students in one QR session.) Tj ET
+BT /F1 10 Tf 66 331 Td (- JWT identity: attendance is always tied to the authenticated student.) Tj ET
+54 308 m 541 308 l S
+BT /F2 13 Tf 54 283 Td (12. Reports and Analytics) Tj ET
+BT /F2 11 Tf 54 257 Td (Teacher Reports) Tj ET
+BT /F1 10 Tf 54 233 Td (Teacher dashboard can show:) Tj ET
+BT /F1 10 Tf 66 210 Td (- Monthly attendance report for selected section and subject.) Tj ET
+BT /F1 10 Tf 66 194 Td (- Defaulter list below 75%.) Tj ET
+BT /F1 10 Tf 66 178 Td (- Total students in current report.) Tj ET
+BT /F1 10 Tf 66 162 Td (- Debarred count.) Tj ET
+BT /F1 10 Tf 66 146 Td (- CSV export of attendance report.) Tj ET
+BT /F1 10 Tf 66 130 Td (- CSV export of defaulter list.) Tj ET
+BT /F2 11 Tf 54 107 Td (Admin Reports) Tj ET
+BT /F1 10 Tf 54 83 Td (Admin dashboard can show:) Tj ET
+54 42 m 541 42 l S
+BT /F1 9 Tf 497 28 Td (Page 8) Tj ET
+endstream
+endobj
+20 0 obj
+<< /Type /Page /Parent 3 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 38 0 R /F3 39 0 R >> >> /Contents 21 0 R >>
+endobj
+21 0 obj
+<< /Length 2868 >>
+stream
+BT /F2 9 Tf 54 808 Td (Smart Attendance and Proxy Detection System) Tj ET
+54 798 m 541 798 l S
+BT /F1 10 Tf 66 790 Td (- Total students.) Tj ET
+BT /F1 10 Tf 66 774 Td (- Active attendance today.) Tj ET
+BT /F1 10 Tf 66 758 Td (- Total sections.) Tj ET
+BT /F1 10 Tf 66 742 Td (- Total teachers.) Tj ET
+BT /F1 10 Tf 66 726 Td (- Average attendance.) Tj ET
+BT /F1 10 Tf 66 710 Td (- Debarred student count.) Tj ET
+BT /F1 10 Tf 66 694 Td (- QR scans generated today.) Tj ET
+BT /F1 10 Tf 66 678 Td (- Subject-wise present/absent distribution.) Tj ET
+BT /F1 10 Tf 66 662 Td (- Selected subject student-wise report.) Tj ET
+BT /F1 10 Tf 66 646 Td (- QR validation history.) Tj ET
+BT /F1 10 Tf 66 630 Td (- Weekly attendance overview.) Tj ET
+54 607 m 541 607 l S
+BT /F2 13 Tf 54 582 Td (13. Document and Study Material Flow) Tj ET
+BT /F2 11 Tf 54 556 Td (Student Assignment Upload) Tj ET
+BT /F1 10 Tf 62 532 Td (1. Student chooses a file from the dashboard.) Tj ET
+BT /F1 10 Tf 62 516 Td (2. Frontend sends multipart form data to `/api/documents/upload`.) Tj ET
+BT /F1 10 Tf 62 500 Td (3. Backend uses Multer to save the file in `backend/uploads`.) Tj ET
+BT /F1 10 Tf 62 484 Td (4. Backend stores metadata in the `Document` collection with `studentId`.) Tj ET
+BT /F1 10 Tf 62 468 Td (5. Student can view uploaded documents.) Tj ET
+BT /F2 11 Tf 54 445 Td (Teacher Material Upload) Tj ET
+BT /F1 10 Tf 62 421 Td (1. Teacher chooses a file from the dashboard.) Tj ET
+BT /F1 10 Tf 62 405 Td (2. Frontend sends multipart form data to `/api/documents/upload`.) Tj ET
+BT /F1 10 Tf 62 389 Td (3. Backend stores metadata with `uploadedBy` set to teacher ID.) Tj ET
+BT /F1 10 Tf 62 373 Td (4. Students can view materials uploaded by teachers.) Tj ET
+BT /F1 10 Tf 62 357 Td (5. Teacher can view their uploaded materials.) Tj ET
+BT /F1 10 Tf 54 334 Td (Important deployment note: Render local disk is ephemeral, so uploaded files may disappear) Tj ET
+BT /F1 10 Tf 54 320 Td (after restart or redeploy unless persistent disk or cloud storage is used.) Tj ET
+54 297 m 541 297 l S
+BT /F2 13 Tf 54 272 Td (14. Timetable Flow) Tj ET
+BT /F1 10 Tf 66 246 Td (- `GET /api/timetable` returns timetable entries and supports filters like teacher ID,) Tj ET
+BT /F1 10 Tf 66 232 Td (  day of week, and batch.) Tj ET
+BT /F1 10 Tf 66 216 Td (- `POST /api/timetable` allows admins to create timetable entries.) Tj ET
+BT /F1 10 Tf 66 200 Td (- Student dashboard displays weekly timetable data.) Tj ET
+BT /F1 10 Tf 66 184 Td (- Timetable entries reference teachers and include subject, day, start time, end time,) Tj ET
+BT /F1 10 Tf 66 170 Td (  room, and batch.) Tj ET
+54 147 m 541 147 l S
+BT /F2 13 Tf 54 122 Td (15. Security Features) Tj ET
+BT /F1 10 Tf 66 96 Td (- bcrypt password hashing.) Tj ET
+BT /F1 10 Tf 66 80 Td (- JWT authentication.) Tj ET
+54 42 m 541 42 l S
+BT /F1 9 Tf 497 28 Td (Page 9) Tj ET
+endstream
+endobj
+22 0 obj
+<< /Type /Page /Parent 3 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 38 0 R /F3 39 0 R >> >> /Contents 23 0 R >>
+endobj
+23 0 obj
+<< /Length 2584 >>
+stream
+BT /F2 9 Tf 54 808 Td (Smart Attendance and Proxy Detection System) Tj ET
+54 798 m 541 798 l S
+BT /F1 10 Tf 66 790 Td (- Role-based authorization middleware.) Tj ET
+BT /F1 10 Tf 66 774 Td (- Helmet security headers.) Tj ET
+BT /F1 10 Tf 66 758 Td (- CORS allowlist for frontend domains and local network development.) Tj ET
+BT /F1 10 Tf 66 742 Td (- Rate limiting for auth, general API, and QR scan endpoints.) Tj ET
+BT /F1 10 Tf 66 726 Td (- Joi validation for key requests.) Tj ET
+BT /F1 10 Tf 66 710 Td (- HMAC-signed QR payloads.) Tj ET
+BT /F1 10 Tf 66 694 Td (- Timing-safe signature comparison.) Tj ET
+BT /F1 10 Tf 66 678 Td (- Location radius validation.) Tj ET
+BT /F1 10 Tf 66 662 Td (- Duplicate attendance prevention.) Tj ET
+BT /F1 10 Tf 66 646 Td (- Client scan ID based anti-proxy protection.) Tj ET
+BT /F1 10 Tf 66 630 Td (- Centralized error handler.) Tj ET
+54 607 m 541 607 l S
+BT /F2 13 Tf 54 582 Td (16. Environment Variables) Tj ET
+BT /F1 10 Tf 54 556 Td (Backend:) Tj ET
+BT /F1 10 Tf 66 533 Td (- `MONGODB_URI`: MongoDB connection string.) Tj ET
+BT /F1 10 Tf 66 517 Td (- `JWT_SECRET`: secret used for JWT signing.) Tj ET
+BT /F1 10 Tf 66 501 Td (- `JWT_EXPIRES_IN`: JWT validity period, default 8h.) Tj ET
+BT /F1 10 Tf 66 485 Td (- `QR_SIGNING_SECRET`: secret used for QR HMAC signatures.) Tj ET
+BT /F1 10 Tf 66 469 Td (- `FRONTEND_URL` or `FRONTEND_URLS`: allowed frontend origins.) Tj ET
+BT /F1 10 Tf 66 453 Td (- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`: mail configuration.) Tj ET
+BT /F1 10 Tf 66 437 Td (- `MAIL_FROM`: sender email for warnings.) Tj ET
+BT /F1 10 Tf 66 421 Td (- `ATTENDANCE_RADIUS_METERS`: allowed distance from teacher location, default 100.) Tj ET
+BT /F1 10 Tf 66 405 Td (- `ATTENDANCE_MAX_ACCURACY_METERS`: maximum accepted GPS accuracy value, default 150.) Tj ET
+BT /F1 10 Tf 66 389 Td (- `PORT`: backend server port, default 5000.) Tj ET
+BT /F1 10 Tf 54 366 Td (Frontend:) Tj ET
+BT /F1 10 Tf 66 343 Td (- `VITE_API_URL`: backend API base URL ending with `/api`.) Tj ET
+54 320 m 541 320 l S
+BT /F2 13 Tf 54 295 Td (17. Local Setup) Tj ET
+BT /F1 10 Tf 54 269 Td (Backend:) Tj ET
+BT /F3 9 Tf 66 241 Td (cd backend) Tj ET
+BT /F3 9 Tf 66 227 Td (npm install) Tj ET
+BT /F3 9 Tf 66 213 Td (npm run dev) Tj ET
+BT /F1 10 Tf 54 187 Td (Frontend:) Tj ET
+BT /F3 9 Tf 66 159 Td (cd frontend) Tj ET
+BT /F3 9 Tf 66 145 Td (npm install) Tj ET
+BT /F3 9 Tf 66 131 Td (npm run dev) Tj ET
+BT /F1 10 Tf 54 105 Td (Useful backend scripts:) Tj ET
+BT /F3 9 Tf 66 77 Td (npm run seed:admin) Tj ET
+54 42 m 541 42 l S
+BT /F1 9 Tf 497 28 Td (Page 10) Tj ET
+endstream
+endobj
+24 0 obj
+<< /Type /Page /Parent 3 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 38 0 R /F3 39 0 R >> >> /Contents 25 0 R >>
+endobj
+25 0 obj
+<< /Length 2241 >>
+stream
+BT /F2 9 Tf 54 808 Td (Smart Attendance and Proxy Detection System) Tj ET
+54 798 m 541 798 l S
+BT /F3 9 Tf 66 790 Td (npm run seed:students) Tj ET
+BT /F3 9 Tf 66 776 Td (npm run seed:teachers) Tj ET
+BT /F3 9 Tf 66 762 Td (npm run migrate:sections) Tj ET
+BT /F3 9 Tf 66 748 Td (npm start) Tj ET
+54 722 m 541 722 l S
+BT /F2 13 Tf 54 697 Td (18. Deployment Summary) Tj ET
+BT /F1 10 Tf 54 671 Td (Recommended Render deployment:) Tj ET
+BT /F1 10 Tf 66 648 Td (- Backend as a Node Web Service.) Tj ET
+BT /F1 10 Tf 66 632 Td (- Frontend as a Static Site.) Tj ET
+BT /F1 10 Tf 66 616 Td (- MongoDB Atlas for database.) Tj ET
+BT /F1 10 Tf 54 593 Td (Backend Render settings:) Tj ET
+BT /F1 10 Tf 66 570 Td (- Root directory: `backend`) Tj ET
+BT /F1 10 Tf 66 554 Td (- Build command: `npm install`) Tj ET
+BT /F1 10 Tf 66 538 Td (- Start command: `npm start`) Tj ET
+BT /F1 10 Tf 66 522 Td (- Health check: `/api/health`) Tj ET
+BT /F1 10 Tf 54 499 Td (Frontend Render settings:) Tj ET
+BT /F1 10 Tf 66 476 Td (- Root directory: `frontend`) Tj ET
+BT /F1 10 Tf 66 460 Td (- Build command: `npm install && npm run build`) Tj ET
+BT /F1 10 Tf 66 444 Td (- Publish directory: `dist`) Tj ET
+BT /F1 10 Tf 66 428 Td (- Rewrite: `/*` to `/index.html`) Tj ET
+54 405 m 541 405 l S
+BT /F2 13 Tf 54 380 Td (19. Important API Endpoints) Tj ET
+BT /F1 10 Tf 54 354 Td (Authentication:) Tj ET
+BT /F1 10 Tf 66 331 Td (- `POST /api/auth/login`) Tj ET
+BT /F1 10 Tf 66 315 Td (- `POST /api/auth/reset-password`) Tj ET
+BT /F1 10 Tf 54 292 Td (Student:) Tj ET
+BT /F1 10 Tf 66 269 Td (- `POST /api/student/scan-qr`) Tj ET
+BT /F1 10 Tf 66 253 Td (- `GET /api/student/my-attendance`) Tj ET
+BT /F1 10 Tf 54 230 Td (Teacher:) Tj ET
+BT /F1 10 Tf 66 207 Td (- `POST /api/teacher/generate-qr`) Tj ET
+BT /F1 10 Tf 66 191 Td (- `GET /api/teacher/monthly-report`) Tj ET
+BT /F1 10 Tf 66 175 Td (- `GET /api/teacher/defaulters`) Tj ET
+BT /F1 10 Tf 54 152 Td (Admin:) Tj ET
+BT /F1 10 Tf 66 129 Td (- `GET /api/admin/monthly-report`) Tj ET
+BT /F1 10 Tf 66 113 Td (- `GET /api/admin/defaulters`) Tj ET
+BT /F1 10 Tf 66 97 Td (- `GET /api/admin/attendance-analytics`) Tj ET
+BT /F1 10 Tf 66 81 Td (- `GET /api/admin/dashboard-summary`) Tj ET
+54 42 m 541 42 l S
+BT /F1 9 Tf 497 28 Td (Page 11) Tj ET
+endstream
+endobj
+26 0 obj
+<< /Type /Page /Parent 3 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 38 0 R /F3 39 0 R >> >> /Contents 27 0 R >>
+endobj
+27 0 obj
+<< /Length 2672 >>
+stream
+BT /F2 9 Tf 54 808 Td (Smart Attendance and Proxy Detection System) Tj ET
+54 798 m 541 798 l S
+BT /F1 10 Tf 66 790 Td (- `GET /api/admin/qr-validations`) Tj ET
+BT /F1 10 Tf 54 767 Td (Timetable:) Tj ET
+BT /F1 10 Tf 66 744 Td (- `GET /api/timetable`) Tj ET
+BT /F1 10 Tf 66 728 Td (- `POST /api/timetable`) Tj ET
+BT /F1 10 Tf 54 705 Td (Documents:) Tj ET
+BT /F1 10 Tf 66 682 Td (- `POST /api/documents/upload`) Tj ET
+BT /F1 10 Tf 66 666 Td (- `GET /api/documents/my-documents`) Tj ET
+BT /F1 10 Tf 66 650 Td (- `GET /api/documents/teacher-documents`) Tj ET
+BT /F1 10 Tf 66 634 Td (- `GET /api/documents/materials`) Tj ET
+BT /F1 10 Tf 54 611 Td (Health:) Tj ET
+BT /F1 10 Tf 66 588 Td (- `GET /api/health`) Tj ET
+54 565 m 541 565 l S
+BT /F2 13 Tf 54 540 Td (20. Data Flow Diagram) Tj ET
+BT /F3 9 Tf 66 509 Td (Teacher Dashboard) Tj ET
+BT /F3 9 Tf 66 495 Td (  -> Browser Geolocation) Tj ET
+BT /F3 9 Tf 66 481 Td (  -> POST /api/teacher/generate-qr) Tj ET
+BT /F3 9 Tf 66 467 Td (  -> QrSession saved in MongoDB) Tj ET
+BT /F3 9 Tf 66 453 Td (  -> Signed QR generated) Tj ET
+BT /F3 9 Tf 66 439 Td (  -> QR displayed to class) Tj ET
+BT /F3 9 Tf 66 420 Td (Student Dashboard) Tj ET
+BT /F3 9 Tf 66 406 Td (  -> Camera scans QR) Tj ET
+BT /F3 9 Tf 66 392 Td (  -> Browser Geolocation) Tj ET
+BT /F3 9 Tf 66 378 Td (  -> POST /api/student/scan-qr) Tj ET
+BT /F3 9 Tf 66 364 Td (  -> QR/session/signature/location checks) Tj ET
+BT /F3 9 Tf 66 350 Td (  -> Attendance saved in MongoDB) Tj ET
+BT /F3 9 Tf 66 336 Td (  -> Dashboard refreshes attendance) Tj ET
+BT /F3 9 Tf 66 317 Td (Admin Dashboard) Tj ET
+BT /F3 9 Tf 66 303 Td (  -> GET analytics/report APIs) Tj ET
+BT /F3 9 Tf 66 289 Td (  -> Aggregates Attendance, Student, Teacher, QrSession, Timetable) Tj ET
+BT /F3 9 Tf 66 275 Td (  -> Charts, summaries, and validation history displayed) Tj ET
+54 249 m 541 249 l S
+BT /F2 13 Tf 54 224 Td (21. Current Strengths) Tj ET
+BT /F1 10 Tf 66 198 Td (- Role-based system design.) Tj ET
+BT /F1 10 Tf 66 182 Td (- Practical anti-proxy mechanism using QR plus GPS.) Tj ET
+BT /F1 10 Tf 66 166 Td (- Signed QR payload prevents QR data tampering.) Tj ET
+BT /F1 10 Tf 66 150 Td (- Separate student, teacher, and admin dashboards.) Tj ET
+BT /F1 10 Tf 66 134 Td (- Attendance analytics and defaulter reporting.) Tj ET
+BT /F1 10 Tf 66 118 Td (- File upload workflow for assignments and study materials.) Tj ET
+BT /F1 10 Tf 66 102 Td (- Deployment instructions and Render configuration.) Tj ET
+BT /F1 10 Tf 66 86 Td (- Clear backend modularization into routes, controllers, models, middleware, and) Tj ET
+BT /F1 10 Tf 66 72 Td (  utilities.) Tj ET
+54 42 m 541 42 l S
+BT /F1 9 Tf 497 28 Td (Page 12) Tj ET
+endstream
+endobj
+28 0 obj
+<< /Type /Page /Parent 3 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 38 0 R /F3 39 0 R >> >> /Contents 29 0 R >>
+endobj
+29 0 obj
+<< /Length 3345 >>
+stream
+BT /F2 9 Tf 54 808 Td (Smart Attendance and Proxy Detection System) Tj ET
+54 798 m 541 798 l S
+54 783 m 541 783 l S
+BT /F2 13 Tf 54 758 Td (22. Possible Improvements) Tj ET
+BT /F1 10 Tf 66 732 Td (- Store uploads in cloud storage such as S3, Cloudinary, or Firebase Storage for) Tj ET
+BT /F1 10 Tf 66 718 Td (  production.) Tj ET
+BT /F1 10 Tf 66 702 Td (- Add refresh tokens or HTTP-only cookies for stronger session handling.) Tj ET
+BT /F1 10 Tf 66 686 Td (- Add admin CRUD screens for students, teachers, subjects, sections, and timetable.) Tj ET
+BT /F1 10 Tf 66 670 Td (- Add test cases for authentication, QR validation, and reports.) Tj ET
+BT /F1 10 Tf 66 654 Td (- Add stricter file type and file size validation.) Tj ET
+BT /F1 10 Tf 66 638 Td (- Add audit logs for admin actions.) Tj ET
+BT /F1 10 Tf 66 622 Td (- Add email/OTP verification before password reset.) Tj ET
+BT /F1 10 Tf 66 606 Td (- Add real-time attendance updates using WebSockets.) Tj ET
+BT /F1 10 Tf 66 590 Td (- Add QR session closure by teacher.) Tj ET
+BT /F1 10 Tf 66 574 Td (- Add attendance export as PDF in addition to CSV.) Tj ET
+BT /F1 10 Tf 66 558 Td (- Add indexes/aggregation pipelines for report performance at larger scale.) Tj ET
+54 535 m 541 535 l S
+BT /F2 13 Tf 54 510 Td (23. Viva and Interview Questions With Answers) Tj ET
+BT /F2 11 Tf 54 484 Td (Project Basics) Tj ET
+BT /F1 10 Tf 54 460 Td (Q1. What problem does this project solve?) Tj ET
+BT /F1 10 Tf 54 444 Td (A. It digitizes attendance and reduces proxy attendance by requiring authenticated QR scans) Tj ET
+BT /F1 10 Tf 54 430 Td (from students near the teacher's location.) Tj ET
+BT /F1 10 Tf 54 407 Td (Q2. Who are the users of the system?) Tj ET
+BT /F1 10 Tf 54 391 Td (A. Students, teachers, and admins.) Tj ET
+BT /F1 10 Tf 54 368 Td (Q3. What are the main modules?) Tj ET
+BT /F1 10 Tf 54 352 Td (A. Authentication, QR attendance, student dashboard, teacher dashboard, admin analytics,) Tj ET
+BT /F1 10 Tf 54 338 Td (timetable, document upload, and reports.) Tj ET
+BT /F1 10 Tf 54 315 Td (Q4. Why is it called a smart attendance system?) Tj ET
+BT /F1 10 Tf 54 299 Td (A. Because it uses QR codes, GPS validation, signed payloads, duplicate checks, analytics,) Tj ET
+BT /F1 10 Tf 54 285 Td (and automated warning flow instead of manual attendance.) Tj ET
+BT /F1 10 Tf 54 262 Td (Q5. What makes it different from a normal attendance system?) Tj ET
+BT /F1 10 Tf 54 246 Td (A. A normal system may only record presence manually. This system verifies identity, time,) Tj ET
+BT /F1 10 Tf 54 232 Td (QR validity, section, GPS proximity, and duplicate scans.) Tj ET
+BT /F2 11 Tf 54 209 Td (Architecture) Tj ET
+BT /F1 10 Tf 54 185 Td (Q6. Which architecture is used?) Tj ET
+BT /F1 10 Tf 54 169 Td (A. Client-server architecture with React frontend, Express backend, and MongoDB database.) Tj ET
+BT /F1 10 Tf 54 146 Td (Q7. Why did you separate frontend and backend?) Tj ET
+BT /F1 10 Tf 54 130 Td (A. Separation improves maintainability, allows independent deployment, and keeps UI logic) Tj ET
+BT /F1 10 Tf 54 116 Td (separate from API/business logic.) Tj ET
+BT /F1 10 Tf 54 93 Td (Q8. What is the role of Express?) Tj ET
+BT /F1 10 Tf 54 77 Td (A. Express handles REST API routes, middleware, authentication checks, request validation,) Tj ET
+54 42 m 541 42 l S
+BT /F1 9 Tf 497 28 Td (Page 13) Tj ET
+endstream
+endobj
+30 0 obj
+<< /Type /Page /Parent 3 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 38 0 R /F3 39 0 R >> >> /Contents 31 0 R >>
+endobj
+31 0 obj
+<< /Length 3448 >>
+stream
+BT /F2 9 Tf 54 808 Td (Smart Attendance and Proxy Detection System) Tj ET
+54 798 m 541 798 l S
+BT /F1 10 Tf 54 790 Td (and controller execution.) Tj ET
+BT /F1 10 Tf 54 767 Td (Q9. What is the role of MongoDB?) Tj ET
+BT /F1 10 Tf 54 751 Td (A. MongoDB stores users, QR sessions, attendance records, timetable entries, and document) Tj ET
+BT /F1 10 Tf 54 737 Td (metadata.) Tj ET
+BT /F1 10 Tf 54 714 Td (Q10. What is Mongoose used for?) Tj ET
+BT /F1 10 Tf 54 698 Td (A. Mongoose defines schemas, models, indexes, validation rules, and provides database query) Tj ET
+BT /F1 10 Tf 54 684 Td (APIs.) Tj ET
+BT /F2 11 Tf 54 661 Td (Authentication) Tj ET
+BT /F1 10 Tf 54 637 Td (Q11. How does login work?) Tj ET
+BT /F1 10 Tf 54 621 Td (A. The user submits role, identifier, and password. Backend validates input, finds the user,) Tj ET
+BT /F1 10 Tf 54 607 Td (compares bcrypt password hash, signs a JWT, and returns token plus user details.) Tj ET
+BT /F1 10 Tf 54 584 Td (Q12. Why is bcrypt used?) Tj ET
+BT /F1 10 Tf 54 568 Td (A. bcrypt hashes passwords with salt, so plain passwords are not stored in the database.) Tj ET
+BT /F1 10 Tf 54 545 Td (Q13. What is JWT?) Tj ET
+BT /F1 10 Tf 54 529 Td (A. JWT is a signed token that carries user identity and role. The backend verifies it before) Tj ET
+BT /F1 10 Tf 54 515 Td (allowing protected API access.) Tj ET
+BT /F1 10 Tf 54 492 Td (Q14. How is role-based access implemented?) Tj ET
+BT /F1 10 Tf 54 476 Td (A. `authenticate` verifies the token and `authorize` checks whether the user's role is) Tj ET
+BT /F1 10 Tf 54 462 Td (allowed for the route.) Tj ET
+BT /F1 10 Tf 54 439 Td (Q15. Why should JWT secret be stored in environment variables?) Tj ET
+BT /F1 10 Tf 54 423 Td (A. Secrets must not be hardcoded because anyone with source access could forge tokens.) Tj ET
+BT /F2 11 Tf 54 400 Td (QR Attendance) Tj ET
+BT /F1 10 Tf 54 376 Td (Q16. How is the QR code generated?) Tj ET
+BT /F1 10 Tf 54 360 Td (A. Backend creates a QR session, signs session metadata using HMAC SHA-256, converts it into) Tj ET
+BT /F1 10 Tf 54 346 Td (a QR image data URL, and sends it to the frontend.) Tj ET
+BT /F1 10 Tf 54 323 Td (Q17. What does the QR payload contain?) Tj ET
+BT /F1 10 Tf 54 307 Td (A. It contains type, version, session ID, teacher ID, subject, section, QR token, issued) Tj ET
+BT /F1 10 Tf 54 293 Td (time, expiry time, and signature.) Tj ET
+BT /F1 10 Tf 54 270 Td (Q18. Why is the QR signed?) Tj ET
+BT /F1 10 Tf 54 254 Td (A. Signing prevents students from editing QR fields such as subject, expiry, session ID, or) Tj ET
+BT /F1 10 Tf 54 240 Td (section.) Tj ET
+BT /F1 10 Tf 54 217 Td (Q19. What happens when QR expires?) Tj ET
+BT /F1 10 Tf 54 201 Td (A. The scan API rejects it because current time is greater than session expiry time.) Tj ET
+BT /F1 10 Tf 54 178 Td (Q20. How does the system prevent duplicate attendance?) Tj ET
+BT /F1 10 Tf 54 162 Td (A. It checks existing records for the same student and QR session, and for the same student,) Tj ET
+BT /F1 10 Tf 54 148 Td (subject, and date.) Tj ET
+BT /F1 10 Tf 54 125 Td (Q21. How is proxy attendance reduced?) Tj ET
+BT /F1 10 Tf 54 109 Td (A. The system checks JWT identity, QR signature, session validity, student section, GPS) Tj ET
+BT /F1 10 Tf 54 95 Td (distance, GPS accuracy, client scan ID, and duplicate attendance.) Tj ET
+BT /F1 10 Tf 54 72 Td (Q22. What is Haversine distance?) Tj ET
+54 42 m 541 42 l S
+BT /F1 9 Tf 497 28 Td (Page 14) Tj ET
+endstream
+endobj
+32 0 obj
+<< /Type /Page /Parent 3 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 38 0 R /F3 39 0 R >> >> /Contents 33 0 R >>
+endobj
+33 0 obj
+<< /Length 3276 >>
+stream
+BT /F2 9 Tf 54 808 Td (Smart Attendance and Proxy Detection System) Tj ET
+54 798 m 541 798 l S
+BT /F1 10 Tf 54 790 Td (A. It is a formula used to calculate distance between two latitude-longitude points on) Tj ET
+BT /F1 10 Tf 54 776 Td (Earth.) Tj ET
+BT /F1 10 Tf 54 753 Td (Q23. Why is GPS accuracy checked?) Tj ET
+BT /F1 10 Tf 54 737 Td (A. Low accuracy can produce unreliable location results, so the scan is rejected if accuracy) Tj ET
+BT /F1 10 Tf 54 723 Td (is worse than the configured threshold.) Tj ET
+BT /F1 10 Tf 54 700 Td (Q24. Can a screenshot of QR be misused?) Tj ET
+BT /F1 10 Tf 54 684 Td (A. It is harder to misuse because QR expires quickly, is signed, tied to a session, and) Tj ET
+BT /F1 10 Tf 54 670 Td (still requires valid student GPS location.) Tj ET
+BT /F1 10 Tf 54 647 Td (Q25. Why store teacher location?) Tj ET
+BT /F1 10 Tf 54 631 Td (A. Teacher location is the reference point used to verify whether the student is physically) Tj ET
+BT /F1 10 Tf 54 617 Td (near the class.) Tj ET
+BT /F2 11 Tf 54 594 Td (Database) Tj ET
+BT /F1 10 Tf 54 570 Td (Q26. Why use indexes in Attendance?) Tj ET
+BT /F1 10 Tf 54 554 Td (A. Indexes speed up lookups and enforce uniqueness for duplicate prevention.) Tj ET
+BT /F1 10 Tf 54 531 Td (Q27. What is the purpose of QrSession collection?) Tj ET
+BT /F1 10 Tf 54 515 Td (A. It stores active and past QR sessions with token, expiry, subject, section, teacher, and) Tj ET
+BT /F1 10 Tf 54 501 Td (location.) Tj ET
+BT /F1 10 Tf 54 478 Td (Q28. Why is `studentId + subject + date` unique?) Tj ET
+BT /F1 10 Tf 54 462 Td (A. To prevent a student from marking attendance more than once for the same subject on the) Tj ET
+BT /F1 10 Tf 54 448 Td (same day.) Tj ET
+BT /F1 10 Tf 54 425 Td (Q29. Why is `studentId + qrSessionId` unique?) Tj ET
+BT /F1 10 Tf 54 409 Td (A. To prevent a student from marking the same QR session multiple times.) Tj ET
+BT /F1 10 Tf 54 386 Td (Q30. What is the Document model used for?) Tj ET
+BT /F1 10 Tf 54 370 Td (A. It stores metadata for uploaded assignments and study materials.) Tj ET
+BT /F2 11 Tf 54 347 Td (Frontend) Tj ET
+BT /F1 10 Tf 54 323 Td (Q31. Why use React?) Tj ET
+BT /F1 10 Tf 54 307 Td (A. React makes it easier to build reusable components and dynamic dashboards.) Tj ET
+BT /F1 10 Tf 54 284 Td (Q32. Why use Vite?) Tj ET
+BT /F1 10 Tf 54 268 Td (A. Vite provides fast development server startup and optimized production builds.) Tj ET
+BT /F1 10 Tf 54 245 Td (Q33. How does frontend attach JWT?) Tj ET
+BT /F1 10 Tf 54 229 Td (A. Axios interceptor reads token from local storage and adds it to the Authorization header.) Tj ET
+BT /F1 10 Tf 54 206 Td (Q34. Which library is used for charts?) Tj ET
+BT /F1 10 Tf 54 190 Td (A. Recharts is used in the admin dashboard.) Tj ET
+BT /F1 10 Tf 54 167 Td (Q35. Which library is used for icons?) Tj ET
+BT /F1 10 Tf 54 151 Td (A. Lucide React is used for UI icons.) Tj ET
+BT /F2 11 Tf 54 128 Td (Reports and Analytics) Tj ET
+BT /F1 10 Tf 54 104 Td (Q36. How is monthly report generated?) Tj ET
+BT /F1 10 Tf 54 88 Td (A. Backend fetches students, fetches attendance for selected subject/month/year, calculates) Tj ET
+BT /F1 10 Tf 54 74 Td (present count, total count, and percentage.) Tj ET
+54 42 m 541 42 l S
+BT /F1 9 Tf 497 28 Td (Page 15) Tj ET
+endstream
+endobj
+34 0 obj
+<< /Type /Page /Parent 3 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 38 0 R /F3 39 0 R >> >> /Contents 35 0 R >>
+endobj
+35 0 obj
+<< /Length 3377 >>
+stream
+BT /F2 9 Tf 54 808 Td (Smart Attendance and Proxy Detection System) Tj ET
+54 798 m 541 798 l S
+BT /F1 10 Tf 54 783 Td (Q37. What is a defaulter?) Tj ET
+BT /F1 10 Tf 54 767 Td (A. A student whose attendance percentage is below the threshold, usually 75%.) Tj ET
+BT /F1 10 Tf 54 744 Td (Q38. How does admin dashboard calculate average attendance?) Tj ET
+BT /F1 10 Tf 54 728 Td (A. It counts all attendance records and calculates present records divided by total records.) Tj ET
+BT /F1 10 Tf 54 705 Td (Q39. What does QR validation history show?) Tj ET
+BT /F1 10 Tf 54 689 Td (A. It shows recent QR sessions, teacher, subject, section, students marked, location,) Tj ET
+BT /F1 10 Tf 54 675 Td (timestamp, and status.) Tj ET
+BT /F1 10 Tf 54 652 Td (Q40. Why are analytics useful?) Tj ET
+BT /F1 10 Tf 54 636 Td (A. They help admins and teachers identify weak attendance patterns and take action early.) Tj ET
+BT /F2 11 Tf 54 613 Td (Security) Tj ET
+BT /F1 10 Tf 54 589 Td (Q41. What security middleware is used?) Tj ET
+BT /F1 10 Tf 54 573 Td (A. Helmet, CORS, rate limiters, JWT middleware, role authorization, and Joi validation.) Tj ET
+BT /F1 10 Tf 54 550 Td (Q42. Why is rate limiting required?) Tj ET
+BT /F1 10 Tf 54 534 Td (A. It reduces brute-force login attempts and repeated QR scan abuse.) Tj ET
+BT /F1 10 Tf 54 511 Td (Q43. Why use timing-safe signature comparison?) Tj ET
+BT /F1 10 Tf 54 495 Td (A. It reduces timing attack risk when comparing cryptographic signatures.) Tj ET
+BT /F1 10 Tf 54 472 Td (Q44. What is CORS?) Tj ET
+BT /F1 10 Tf 54 456 Td (A. CORS controls which frontend origins are allowed to call backend APIs from a browser.) Tj ET
+BT /F1 10 Tf 54 433 Td (Q45. What is the risk of storing JWT in local storage?) Tj ET
+BT /F1 10 Tf 54 417 Td (A. If XSS occurs, an attacker may steal the token. HTTP-only cookies are safer for) Tj ET
+BT /F1 10 Tf 54 403 Td (production.) Tj ET
+BT /F2 11 Tf 54 380 Td (Deployment) Tj ET
+BT /F1 10 Tf 54 356 Td (Q46. How is this project deployed?) Tj ET
+BT /F1 10 Tf 54 340 Td (A. Backend is deployed as a Render Node web service, frontend as a Render static site, and) Tj ET
+BT /F1 10 Tf 54 326 Td (database on MongoDB Atlas.) Tj ET
+BT /F1 10 Tf 54 303 Td (Q47. Why is `VITE_API_URL` needed?) Tj ET
+BT /F1 10 Tf 54 287 Td (A. It tells the frontend where the backend API is hosted.) Tj ET
+BT /F1 10 Tf 54 264 Td (Q48. Why is `/api/health` useful?) Tj ET
+BT /F1 10 Tf 54 248 Td (A. It lets Render or developers verify that the backend server is running.) Tj ET
+BT /F1 10 Tf 54 225 Td (Q49. Why should file uploads move to cloud storage in production?) Tj ET
+BT /F1 10 Tf 54 209 Td (A. Render's local disk can be ephemeral, so uploaded files may disappear after restarts or) Tj ET
+BT /F1 10 Tf 54 195 Td (redeployments.) Tj ET
+BT /F1 10 Tf 54 172 Td (Q50. What are the most important backend environment variables?) Tj ET
+BT /F1 10 Tf 54 156 Td (A. `MONGODB_URI`, `JWT_SECRET`, `QR_SIGNING_SECRET`, and frontend URL/CORS settings.) Tj ET
+BT /F2 11 Tf 54 133 Td (Advanced and HR-Style Questions) Tj ET
+BT /F1 10 Tf 54 109 Td (Q51. What was the most challenging part of the project?) Tj ET
+BT /F1 10 Tf 54 93 Td (A. Combining QR expiry, signature validation, GPS verification, and duplicate prevention) Tj ET
+BT /F1 10 Tf 54 79 Td (into one reliable attendance flow.) Tj ET
+54 42 m 541 42 l S
+BT /F1 9 Tf 497 28 Td (Page 16) Tj ET
+endstream
+endobj
+36 0 obj
+<< /Type /Page /Parent 3 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 38 0 R /F3 39 0 R >> >> /Contents 37 0 R >>
+endobj
+37 0 obj
+<< /Length 2207 >>
+stream
+BT /F2 9 Tf 54 808 Td (Smart Attendance and Proxy Detection System) Tj ET
+54 798 m 541 798 l S
+BT /F1 10 Tf 54 790 Td (Q52. How would you scale this system?) Tj ET
+BT /F1 10 Tf 54 774 Td (A. Use database indexes, aggregation pipelines, cloud file storage, caching for dashboard) Tj ET
+BT /F1 10 Tf 54 760 Td (summaries, load-balanced backend instances, and background jobs for email.) Tj ET
+BT /F1 10 Tf 54 737 Td (Q53. How would you improve password reset?) Tj ET
+BT /F1 10 Tf 54 721 Td (A. Add OTP/email verification and short-lived reset tokens instead of directly resetting) Tj ET
+BT /F1 10 Tf 54 707 Td (with identifier.) Tj ET
+BT /F1 10 Tf 54 684 Td (Q54. How would you test QR attendance?) Tj ET
+BT /F1 10 Tf 54 668 Td (A. Unit test QR signature functions, integration test scan API, test expired QR, wrong) Tj ET
+BT /F1 10 Tf 54 654 Td (section, duplicate scan, outside radius, and invalid signature.) Tj ET
+BT /F1 10 Tf 54 631 Td (Q55. What can be added in future?) Tj ET
+BT /F1 10 Tf 54 615 Td (A. Face recognition, biometric integration, WebSocket live attendance, better admin) Tj ET
+BT /F1 10 Tf 54 601 Td (management pages, PDF reports, and cloud storage.) Tj ET
+54 578 m 541 578 l S
+BT /F2 13 Tf 54 553 Td (24. Short Explanation for Viva) Tj ET
+BT /F1 10 Tf 54 527 Td (This project is a role-based smart attendance web application built using React, Node.js,) Tj ET
+BT /F1 10 Tf 54 513 Td (Express, and MongoDB. Teachers generate short-lived signed QR codes for a subject and) Tj ET
+BT /F1 10 Tf 54 499 Td (section. Students scan the QR code from their dashboard, and the backend validates the) Tj ET
+BT /F1 10 Tf 54 485 Td (student's JWT, QR signature, session expiry, section, location radius, GPS accuracy, and) Tj ET
+BT /F1 10 Tf 54 471 Td (duplicate attendance rules. Attendance is stored in MongoDB and is used to generate student) Tj ET
+BT /F1 10 Tf 54 457 Td (summaries, teacher reports, defaulter lists, admin analytics, and QR validation logs. The) Tj ET
+BT /F1 10 Tf 54 443 Td (project also includes timetable management and document upload features for assignments and) Tj ET
+BT /F1 10 Tf 54 429 Td (study material.) Tj ET
+54 42 m 541 42 l S
+BT /F1 9 Tf 497 28 Td (Page 17) Tj ET
+endstream
+endobj
+38 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+39 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+xref
+0 40
+0000000000 65535 f 
+0000000015 00000 n 
+0000000085 00000 n 
+0000000134 00000 n 
+0000000302 00000 n 
+0000000450 00000 n 
+0000003649 00000 n 
+0000003797 00000 n 
+0000006405 00000 n 
+0000006553 00000 n 
+0000009192 00000 n 
+0000009342 00000 n 
+0000012149 00000 n 
+0000012299 00000 n 
+0000014256 00000 n 
+0000014406 00000 n 
+0000016594 00000 n 
+0000016744 00000 n 
+0000019927 00000 n 
+0000020077 00000 n 
+0000023281 00000 n 
+0000023431 00000 n 
+0000026351 00000 n 
+0000026501 00000 n 
+0000029137 00000 n 
+0000029287 00000 n 
+0000031580 00000 n 
+0000031730 00000 n 
+0000034454 00000 n 
+0000034604 00000 n 
+0000038001 00000 n 
+0000038151 00000 n 
+0000041651 00000 n 
+0000041801 00000 n 
+0000045129 00000 n 
+0000045279 00000 n 
+0000048708 00000 n 
+0000048858 00000 n 
+0000051117 00000 n 
+0000051193 00000 n 
+trailer
+<< /Size 40 /Root 2 0 R >>
+startxref
+51262
+%%EOF

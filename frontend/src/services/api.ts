@@ -148,6 +148,24 @@ export const login = async (
   return response.data;
 };
 
+export type NewStudentPayload = {
+  SrNo: number;
+  studentName: string;
+  rollNo: string;
+  section: string;
+  password: string;
+  role: "student";
+};
+
+export type NewTeacherPayload = {
+  teacherName: string;
+  teacherId: string;
+  email: string;
+  subject: string;
+  password: string;
+  role: "teacher";
+};
+
 export const resetPassword = async (
   role: UserRole,
   identifier: string,
@@ -300,6 +318,30 @@ export const getAdminAttendanceAnalytics = async (params: {
 export const getAdminQrValidations = async (params?: { limit?: number }) => {
   const response = await api.get<QrValidationRecord[]>("/admin/qr-validations", {
     params,
+  });
+  return response.data;
+};
+
+export const createAdminStudent = async (student: NewStudentPayload) => {
+  const response = await api.post<{ message: string }>("/admin/students", student);
+  return response.data;
+};
+
+export const createAdminStudents = async (students: NewStudentPayload[]) => {
+  const response = await api.post<{ message: string; count: number }>("/admin/students/bulk", {
+    students,
+  });
+  return response.data;
+};
+
+export const createAdminTeacher = async (teacher: NewTeacherPayload) => {
+  const response = await api.post<{ message: string }>("/admin/teachers", teacher);
+  return response.data;
+};
+
+export const createAdminTeachers = async (teachers: NewTeacherPayload[]) => {
+  const response = await api.post<{ message: string; count: number }>("/admin/teachers/bulk", {
+    teachers,
   });
   return response.data;
 };

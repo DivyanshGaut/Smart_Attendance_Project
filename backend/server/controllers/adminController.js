@@ -40,6 +40,186 @@ const getMonthRange = (month, year) => {
 const getWeekdayLabel = (date) =>
   new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(new Date(date));
 
+const normalizeStudentPayload = (payload) => ({
+  SrNo: Number(payload.SrNo),
+  studentName: payload.studentName,
+  rollNo: payload.rollNo,
+  section: payload.section,
+  password: payload.password,
+  role: 'student',
+});
+
+const normalizeTeacherPayload = (payload) => ({
+  teacherName: payload.teacherName,
+  teacherId: payload.teacherId,
+  email: payload.email,
+  subject: payload.subject,
+  password: payload.password,
+  role: 'teacher',
+});
+
+const hasDuplicate = (items) => new Set(items).size !== items.length;
+
+const validateStudentPayloads = async (students) => {
+  const normalizedStudents = students.map(normalizeStudentPayload);
+  const srNos = normalizedStudents.map((student) => student.SrNo);
+  const rollNos = normalizedStudents.map((student) => student.rollNo);
+
+  if (srNos.some((srNo) => !Number.isFinite(srNo) || srNo <= 0)) {
+    return { message: 'Every student must have a valid SrNo' };
+  }
+
+  if (hasDuplicate(srNos) || hasDuplicate(rollNos)) {
+    return { message: 'Student list contains duplicate SrNo or roll number values' };
+  }
+
+  const existingStudent = await Student.findOne({
+    $or: [{ SrNo: { $in: srNos } }, { rollNo: { $in: rollNos } }],
+  }).lean();
+
+  if (existingStudent) {
+    return { message: 'One of the students uses an SrNo or roll number that already exists' };
+  }
+
+  return { normalizedStudents };
+};
+
+const validateTeacherPayloads = async (teachers) => {
+  const normalizedTeachers = teachers.map(normalizeTeacherPayload);
+  const teacherIds = normalizedTeachers.map((teacher) => teacher.teacherId);
+  const emails = normalizedTeachers.map((teacher) => teacher.email);
+
+  if (hasDuplicate(teacherIds) || hasDuplicate(emails)) {
+    return { message: 'Teacher list contains duplicate teacher ID or email values' };
+  }
+
+  const existingTeacher = await Teacher.findOne({
+    $or: [{ teacherId: { $in: teacherIds } }, { email: { $in: emails } }],
+  }).lean();
+
+  if (existingTeacher) {
+    return { message: 'One of the teachers uses a teacher ID or email that already exists' };
+  }
+
+  return { normalizedTeachers };
+};
+
+const createStudent = async (req, res, next) => {
+  try {
+    const student = await Student.create(normalizeStudentPayload(req.body));
+
+    return res.status(201).json({
+      message: 'Student created successfully',
+      student: {
+        id: student._id,
+        SrNo: student.SrNo,
+        studentName: student.studentName,
+        rollNo: student.rollNo,
+        section: student.section,
+        role: student.role,
+      },
+    });
+  } catch (err) {
+    if (err.code === 11000) {
+      return res.status(409).json({
+        message: 'Student with this SrNo or roll number already exists',
+        fields: err.keyValue,
+      });
+    }
+    next(err);
+  }
+};
+
+const createStudents = async (req, res, next) => {
+  try {
+    const students = Array.isArray(req.body.students) ? req.body.students : [];
+
+    if (!students.length) {
+      return res.status(400).json({ message: 'At least one student is required' });
+    }
+
+    const { message, normalizedStudents } = await validateStudentPayloads(students);
+    if (message) {
+      return res.status(400).json({ message });
+    }
+
+    const createdStudents = await Promise.all(
+      normalizedStudents.map((student) => Student.create(student))
+    );
+
+    return res.status(201).json({
+      message: `${createdStudents.length} students created successfully`,
+      count: createdStudents.length,
+    });
+  } catch (err) {
+    if (err.code === 11000) {
+      return res.status(409).json({
+        message: 'One of the students uses an SrNo or roll number that already exists',
+        fields: err.keyValue,
+      });
+    }
+    next(err);
+  }
+};
+
+const createTeacher = async (req, res, next) => {
+  try {
+    const teacher = await Teacher.create(normalizeTeacherPayload(req.body));
+
+    return res.status(201).json({
+      message: 'Teacher created successfully',
+      teacher: {
+        id: teacher._id,
+        teacherName: teacher.teacherName,
+        teacherId: teacher.teacherId,
+        email: teacher.email,
+        subject: teacher.subject,
+        role: teacher.role,
+      },
+    });
+  } catch (err) {
+    if (err.code === 11000) {
+      return res.status(409).json({
+        message: 'Teacher with this teacher ID or email already exists',
+        fields: err.keyValue,
+      });
+    }
+    next(err);
+  }
+};
+
+const createTeachers = async (req, res, next) => {
+  try {
+    const teachers = Array.isArray(req.body.teachers) ? req.body.teachers : [];
+
+    if (!teachers.length) {
+      return res.status(400).json({ message: 'At least one teacher is required' });
+    }
+
+    const { message, normalizedTeachers } = await validateTeacherPayloads(teachers);
+    if (message) {
+      return res.status(400).json({ message });
+    }
+
+    const createdTeachers = await Promise.all(
+      normalizedTeachers.map((teacher) => Teacher.create(teacher))
+    );
+
+    return res.status(201).json({
+      message: `${createdTeachers.length} teachers created successfully`,
+      count: createdTeachers.length,
+    });
+  } catch (err) {
+    if (err.code === 11000) {
+      return res.status(409).json({
+        message: 'One of the teachers uses a teacher ID or email that already exists',
+        fields: err.keyValue,
+      });
+    }
+    next(err);
+  }
+};
+
 /*
 GET /admin/monthly-report?month=&year=&subject=
 */
@@ -359,6 +539,10 @@ const getQrValidations = async (req, res, next) => {
 };
 
 module.exports = {
+  createStudent,
+  createStudents,
+  createTeacher,
+  createTeachers,
   getMonthlyReport,
   getDefaulters,   
   getAttendanceAnalytics,
